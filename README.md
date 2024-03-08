@@ -20,6 +20,10 @@ docker-compose -f docker-compose-dev.yaml up
 
 and navigate to [dev.commonplace.com](http://dev.commonplace.com).
 
+## Deployment
+
+This is a personal project, so deployment details are left vague. Since it is small, I'm currently spinning it up as a small VM with the Google Compute Engine.
+
 ## TODO:
 
 ### Code Improvements:
