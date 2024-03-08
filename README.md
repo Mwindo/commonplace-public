@@ -1,6 +1,6 @@
 # Commonplace
 
-Commonplace is a bare-bones CMS written with React and Flask.
+Commonplace is a bare-bones CMS written with React and Flask. This is a work in progress. See TODO below.
 
 ## Development
 
@@ -19,3 +19,28 @@ docker-compose -f docker-compose-dev.yaml up
 ```
 
 and navigate to [dev.commonplace.com](http://dev.commonplace.com).
+
+## TODO:
+
+### Code Improvements:
+
+- Refactor backend get_items.
+- Convert JS to TypeScript
+- Add pytest tests, which will require adding a db service to the dev docker-compose. Since I'm not using an ORM, I'll also need to make a simple way to map models to tables. (E.g., spinning up the db service should create the relevant tables based on backend models.)
+- Add Selenium (or Puppeteer, or whatever) tests, which will require adding a new service to the dev docker-compose.
+- Better test coverage in general.
+- Translate into a Next.js project. (I started with a pure React project first, bootstrapped with the now deprecated Create React App simply for speed since the intention has always been to translate to Next.js as an exercise rather than starting with it from the get-go.)
+- Audit for unused libraries.
+- More dynamic modal handling.
+- Audit for accessibility, which is currenly half-hearted.
+
+### Features:
+
+- Add better content editing features (e.g., ability to easily add link, quote, etc.).
+- Add autosave and draft features.
+
+### Bugs:
+
+- Clicking the header after paginating should refresh the pagination; e.g., paginating right and clicking the header should return the item list to the original state.
+
+
