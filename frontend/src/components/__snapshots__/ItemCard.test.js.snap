@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check edit buttons appear if isAuth 1`] = `
+<DocumentFragment>
+  <a
+    class="item"
+    href="/item/1"
+    title="Test Card: Test Description"
+  >
+    <div
+      class="inner_card"
+      role="listitem"
+    >
+      <div
+        class="inner_card_top"
+      >
+        <div
+          class="edit_button_container"
+          role="menubar"
+        >
+          <button
+            aria-label="Edit Item"
+            class="edit_button"
+          >
+            Edit
+          </button>
+          <button
+            aria-label="Delete Item"
+            class="remove_button"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+      <div
+        class="inner_card_bottom"
+      >
+        <p>
+          Test Card
+        </p>
+      </div>
+    </div>
+  </a>
+</DocumentFragment>
+`;
+
+exports[`check no edit buttons appear if not isAuth 1`] = `
+<DocumentFragment>
+  <a
+    class="item"
+    href="/item/1"
+    title="Test Card: Test Description"
+  >
+    <div
+      class="inner_card"
+      role="listitem"
+    >
+      <div
+        class="inner_card_top"
+      />
+      <div
+        class="inner_card_bottom"
+      >
+        <p>
+          Test Card
+        </p>
+      </div>
+    </div>
+  </a>
+</DocumentFragment>
+`;

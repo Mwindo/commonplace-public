@@ -1,0 +1,8 @@
+.content_wrapper {
+  padding-right: 5%;
+  padding-left: 5%;
+  padding-top: max(12vh, 30px);
+  padding-bottom: 5%;
+  font-family: "Noto Serif JP";
+  min-height: 100vh;
+}

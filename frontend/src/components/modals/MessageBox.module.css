@@ -1,0 +1,41 @@
+.message_box_message {
+  margin-bottom: 2em;
+}
+
+.message_box_button_wrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.message_box_confirm {
+  background-color: white;
+  font-size: 1em;
+  border-radius: 0.25em;
+  border: 1px solid black;
+  transition: 0.2s;
+  cursor: pointer;
+  height: 2em;
+}
+
+.message_box_cancel {
+  background-color: white;
+  font-size: 1em;
+  color: black;
+  border-radius: 0.25em;
+  border: 1px solid black;
+  transition: 0.2s;
+  cursor: pointer;
+  height: 2em;
+}
+
+.message_box_confirm:hover {
+  background-color: seagreen;
+  color: white;
+  font-size: 1.3em;
+}
+
+.message_box_cancel:hover {
+  background-color: darkred;
+  color: white;
+  font-size: 1.3em;
+}

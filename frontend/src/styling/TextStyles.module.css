@@ -1,0 +1,25 @@
+.text_link {
+  color: darkred;
+  text-decoration: none;
+}
+
+.text_link:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+.quotation {
+  border-left: 1px solid black;
+  font-style: italic;
+  padding-left: 1em;
+}
+
+.text_body {
+  width: 100%;
+  background-color: whitesmoke;
+  min-height: 20vh;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}

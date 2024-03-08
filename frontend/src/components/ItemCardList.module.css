@@ -1,0 +1,36 @@
+.item_list {
+  border: 0px black solid;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22em, 1fr));
+  justify-content: center;
+  justify-items: center;
+  gap: 2em;
+}
+
+.simple_pagination_bar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.simple_pagination_button {
+  cursor: pointer;
+  width: fit-content;
+  background: transparent;
+  border: 0px;
+  font-size: 1em;
+}
+
+.simple_pagination_button:hover {
+  color: darkred;
+}
+
+.simple_pagination_left {
+  text-align: left;
+  width: 100%;
+}
+
+.simple_pagination_right {
+  text-align: right;
+  width: 100%;
+}

@@ -1,0 +1,9 @@
+.tag_link {
+  color: darkred;
+  text-decoration: none;
+}
+
+.tag_link:hover {
+  color: black;
+  text-decoration: underline;
+}

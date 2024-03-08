@@ -1,0 +1,64 @@
+.header_bar {
+  background-color: darkred;
+  width: 100%;
+  font-family: "Noto Serif JP", serif;
+  color: white;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 5;
+  transition: 0.2s;
+}
+
+.header_small {
+  height: 5vh;
+  min-height: 1rem;
+  font-size: 1.5rem;
+  padding-bottom: .1em;
+  padding-top: .1em;
+}
+
+.header_big {
+  height: 10vh;
+  min-height: 2rem;
+  font-size: 2rem;
+}
+
+.header_bar_left {
+  border: 0px solid black;
+  width: 20%;
+  padding-left: 1em;
+}
+
+.header_bar_right {
+  border: 0px solid black;
+  text-align: right;
+  width: 20%;
+  padding-right: 1em;
+}
+
+.header_bar_middle {
+  width: 60%;
+  justify-content: center;
+  text-align: center;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+}
+
+.link:hover {
+  font-size: 1.05em;
+  color: black;
+  text-decoration: underline;
+}
+
+.logout_button {
+  width: 2rem;
+  cursor: pointer;
+}
+
+.logout_button:hover {
+  filter: invert(100%);
+}

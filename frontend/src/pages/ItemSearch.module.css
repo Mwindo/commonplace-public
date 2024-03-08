@@ -1,0 +1,15 @@
+.item_search_container {
+  border-radius: 2rem;
+  background-color: whitesmoke;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.search_bar_loading {
+  border-radius: 0.5em;
+  width: 100%;
+  height: 4rem;
+  background-color: #ededed;
+}

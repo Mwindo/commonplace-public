@@ -1,0 +1,49 @@
+.add_or_edit_item_container {
+  width: 60vw;
+  height: 80vh;
+  position: relative;
+  overflow: scroll;
+  padding: 1em;
+  padding-top: 0;
+}
+
+.border_box {
+  box-sizing: content-box;
+  width: 90% !important;
+}
+
+.span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.save_button {
+  background-color: white;
+  border: 2px solid black;
+  color: black;
+  border-radius: 0.25em;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 1em;
+}
+
+.save_button:hover {
+  background-color: lightgray;
+  color: darkred;
+  font-size: 1.5em;
+}
+
+.fieldset {
+  border: 0px;
+}
+
+.save_container {
+  display: flex;
+  justify-content: center;
+}
+
+.save_button:disabled {
+  opacity: 0.5;
+}

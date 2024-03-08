@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.left_search_items {
+  border: 0px solid blue;
+  width: 70%;
+}
+
+.right_search_items {
+  border: 0px solid black;
+  width: fit-content;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 0.5em;
+}
+
+.dice_icon {
+  width: 3em;
+  cursor: pointer;
+}
+
+.dice_icon_disabled {
+  width: 3em;
+  filter: invert(15%);
+}
+
+.dice_icon:hover {
+  transform: rotate(10deg);
+}

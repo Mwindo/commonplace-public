@@ -1,0 +1,8 @@
+.title {
+  text-align: left;
+  width: 100%;
+  font-size: 1.5rem;
+  position: relative;
+  z-index: 2;
+  text-decoration: underline;
+}

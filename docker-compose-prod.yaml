@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - production.env
+    command: gunicorn -w 4 -b 0.0.0.0:5000 app:app
+
+  nginx:
+    build:
+      context: ./
+      dockerfile: ./nginx/Dockerfile
+    container_name: nginx
+    ports:
+      - 443:443
+    volumes:
+      # This assumes the certs are on the host
+      # E.g. sudo apt-get update
+      # sudo apt-get install certbot python3-certbot-nginx
+      # sudo certbot --nginx -d appname.site.com
+      # sudo systemctl reload nginx
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - backend

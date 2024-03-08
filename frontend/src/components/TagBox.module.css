@@ -1,0 +1,7 @@
+.tag_box_container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  column-gap: 2em;
+  row-gap: .5em;
+}

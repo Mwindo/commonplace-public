@@ -1,0 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&family=Jacquarda+Bastarda+9&family=Roboto+Mono&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap");
+
+.App {
+  text-align: center;
+}
+
+button {
+  font-family: "Noto Serif JP";
+}

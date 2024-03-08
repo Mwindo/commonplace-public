@@ -1,0 +1,13 @@
+.footer_bar {
+  background-color: darkred;
+  height: 2rem;
+  min-height: 20px;
+  width: 100%;
+  bottom: 0px;
+  font-family: "Noto Serif JP", serif;
+  color: white;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
