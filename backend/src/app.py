@@ -38,6 +38,9 @@ def create_app(environment: str | None = None):
 
         db.init_conn(app)
 
+        from models import model
+        if app.config['ENVIRONMENT'] == AppEnvironment.DEV.value:
+            model.create_all_tables()
         return app
 
 
