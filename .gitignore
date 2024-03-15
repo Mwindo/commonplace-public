@@ -6,6 +6,7 @@
 /frontend/.pnp.js
 **/__pycache__/
 /*.env
+/data
 
 # testing
 /coverage

@@ -29,7 +29,7 @@ def get_items(
         ids_part = f" WHERE A.id IN ({','.join([str(id) for id in ids])})"
     query = (
         f"SELECT {', '.join(fields)} FROM "
-        f"(SELECT *, GROUP_CONCAT(tag_value) as tags{search_query_part}"
+        f"(SELECT {', '.join([f for f in fields if f != 'tags'])}, GROUP_CONCAT(tag_value) as tags{search_query_part}"
         f" FROM {ITEM_TABLE} A LEFT JOIN `ItemTagMapping` B On A.id = B.item_id{ids_part}"
         f" GROUP BY A.id) q {filter_part}"
     )
