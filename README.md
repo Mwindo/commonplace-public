@@ -20,6 +20,8 @@ docker-compose -f docker-compose-dev.yaml up
 
 and navigate to [dev.commonplace.com](http://dev.commonplace.com).
 
+To log into the local dev db, navigate to [dev.commonplace.com/admin](http://dev.commonplace.com/admin) and enter username Admin and password TestPassword. 
+
 ## Deployment
 
 This is a personal project, so deployment details are left vague. Since it is small, I'm currently spinning it up as a small VM with the Google Compute Engine.
@@ -30,7 +32,7 @@ This is a personal project, so deployment details are left vague. Since it is sm
 
 - Refactor backend get_items.
 - Convert JS to TypeScript
-- Add pytest tests, which will require adding a db service to the dev docker-compose. Since I'm not using an ORM, I'll also need to make a simple way to map models to tables. (E.g., spinning up the db service should create the relevant tables based on backend models.)
+- Add pytest tests, ~~which will require adding a db service to the dev docker-compose. Since I'm not using an ORM, I'll also need to make a simple way to map models to tables. (E.g., spinning up the db service should create the relevant tables based on backend models.)~~ this is done but needs improvement
 - Add Selenium (or Puppeteer, or whatever) tests, which will require adding a new service to the dev docker-compose.
 - Better test coverage in general.
 - CSS theming.
