@@ -25,7 +25,6 @@ def create_app(environment: str | None = None):
     # create and configure the application
     app = Flask(__name__, instance_relative_config=True)
 
-    # app.config["JWT_COOKIE_DOMAIN"] = "http://dev.commonplace.com"
     JWTManager(app)
     if not environment:
         environment = os.environ.get("ENVIRONMENT", AppEnvironment.DEV.value)
@@ -35,12 +34,15 @@ def create_app(environment: str | None = None):
     with app.app_context():
         import db
         import router  # This is needed, otherwise we will return 404s
-
+        from models import model
+        
         db.init_conn(app)
 
-        from models import model
+        # Make sure dev DB has the tables and dev user
         if app.config['ENVIRONMENT'] == AppEnvironment.DEV.value:
             model.create_all_tables()
+            model.create_dev_user()
+
         return app
 
 
@@ -48,7 +50,6 @@ app = create_app()
 
 
 def print_startup_string():
-    # Might be best to print all env variables?
     print("Starting server...")
     print("------------------")
     print(f'ENVIRONMENT: {app.config["ENVIRONMENT"]}')

@@ -1,6 +1,7 @@
 from abc import ABC
 from db import get_db
 from werkzeug.security import generate_password_hash
+import pymysql
 
 
 class Model(ABC):
@@ -12,6 +13,7 @@ class Model(ABC):
     def create_db_table(cls):
         db = get_db()
         db.cursor.execute(cls.table_creation_SQL())
+        db.connection.commit()
 
     @classmethod
     def table_creation_SQL(cls):
@@ -27,13 +29,24 @@ def create_all_tables():
     from .author import Author
     from .tags import ItemTagMapping
     from db import get_db
-    Author.create_db_table()
-    ItemDetails.create_db_table()
-    ItemTagMapping.create_db_table()
+
+    # The order here matters because of foreign keys
+    # With a proper ORM, this wouldn't be an issue.
+    for model in [Author, ItemDetails, ItemTagMapping]:
+        model.create_db_table()
+
+
+# TODO: This should be moved somewhere more logical
+def create_dev_user():
     db = get_db()
     try:
-        print('HERE! STILL!!')
-        db.cursor.execute(f'INSERT INTO AUTHOR VALUES(1, "Test", "User", "Tester", "Test User", "fakeemail@123.com", "Admin", "Admin", "{generate_password_hash('password')}");')
+        # We'll make sure an Admin is available for testing
+        password_hash = generate_password_hash("TestPassword")
+        db.cursor.execute(
+            f"INSERT INTO AUTHOR VALUES(1, 'Test', \
+            'User', 'Tester', 'Test User', 'fakeemail@123.com', \
+            'Admin', 'Admin', '{password_hash}');"
+        )
         db.connection.commit()
-    except Exception as e:
-        print('ERROR', e)
+    except pymysql.err.IntegrityError:
+        pass
