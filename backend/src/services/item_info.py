@@ -36,7 +36,6 @@ def get_items(
     if tag:
         query += f" {'AND' if search else 'WHERE'} FIND_IN_SET('{tag}', tags) > 0"
     query += f"{order_by};"
-    print('\n\nQUERY!\n', query, '\n\n')
     db = get_db()
     db.cursor.execute(query)
     columns = db.cursor.description
