@@ -2,6 +2,7 @@ import pytest
 
 from db import get_db, drop_all_tables
 from app import create_app, AppEnvironment
+from flask import current_app
 
 
 @pytest.fixture(scope="session")
@@ -16,13 +17,8 @@ def app():
     # Push an application context
     ctx = _app.app_context()
     ctx.push()
-    db = get_db()
-    db.cursor.execute('SHOW TABLES;')
-    print('GO', db.cursor.fetchall())
 
     yield _app
-
-    drop_all_tables(_app)
 
     # Pop the context and do cleanup after the test is done
     ctx.pop()
@@ -47,15 +43,12 @@ def db(app):
     """
     Setup a database session for testing, this gets executed for each test function.
     """
+    from models.model import create_all_tables
     # Setup the database session
     db = get_db()
 
+    create_all_tables()
+
     yield db
 
-    # Teardown by dropping all tables
-    db_name = app.config["MYSQL_DATABASE_DB"]
-    db.cursor.execute(
-        f"SELECT CONCAT('DROP TABLE IF EXISTS `', table_name, '`;') \
-        FROM information_schema.tables WHERE table_schema = '{db_name}';"
-    )
-    db.connection.commit()
+    drop_all_tables(current_app)

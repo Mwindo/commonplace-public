@@ -6,3 +6,6 @@ class TooManyTagsException(Exception):
 
 class MissingArgumentsException(Exception):
     pass
+
+class InvalidArgumentsException(Exception):
+    pass

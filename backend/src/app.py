@@ -39,12 +39,11 @@ def create_app(environment: str | None = None):
         
         db.init_conn(app)
 
-        # Database setup or teardown based on environment
-        if app.config['ENVIRONMENT'] in [AppEnvironment.DEV.value, AppEnvironment.TEST.value]:
+        # Setup the DB for local development
+        if app.config['ENVIRONMENT'] in [AppEnvironment.DEV.value]:
             model.create_all_tables()
             # We'll initialize a local admin for dev testing
-            if app.config['ENVIRONMENT'] == AppEnvironment.DEV.value:
-                model.create_dev_user()
+            model.create_dev_user()
 
     return app
 
