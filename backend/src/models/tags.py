@@ -17,5 +17,5 @@ class ItemTagMapping(Model):
             UNIQUE KEY `unique_index` (`tag_value`,`item_id`),
             KEY `TagMapsToID` (`item_id`),
             CONSTRAINT `TagMapsToID` FOREIGN KEY (`item_id`) REFERENCES `Item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         """

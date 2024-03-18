@@ -38,11 +38,7 @@ def get_items(
     query += f"{order_by};"
     db = get_db()
     db.cursor.execute(query)
-    columns = db.cursor.description
-    result_raw = [
-        {columns[index][0]: column for index, column in enumerate(value)}
-        for value in db.cursor.fetchall()
-    ]
+    result_raw = db.cursor.fetchall()
     results = []
     for item in result_raw:
         item["tags"] = [s for s in item["tags"].split(",")] if item["tags"] else None
@@ -58,4 +54,4 @@ def get_tags() -> list[str]:
     query = f"SELECT DISTINCT tag_value FROM {TAG_TABLE} ORDER BY tag_value ASC;"
     db.cursor.execute(query)
     tags = db.cursor.fetchall()
-    return [tup[0] for tup in tags]
+    return [tup['tag_value'] for tup in tags]

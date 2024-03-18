@@ -3,3 +3,6 @@ class TagTooLongException(Exception):
 
 class TooManyTagsException(Exception):
     pass
+
+class MissingArgumentsException(Exception):
+    pass

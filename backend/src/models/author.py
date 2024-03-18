@@ -15,6 +15,14 @@ class Author(Model):
     username: str
     password: str
 
+    def validate_fields(self) -> tuple[bool, list[str]]:
+        missing_fields: list[str] = []
+        for field in ['username', 'password']:
+            if not getattr(self, field):
+                missing_fields.append(field)
+        valid = False if missing_fields else True
+        return valid, missing_fields
+
     @classmethod
     def table_creation_SQL(cls):
         return """
@@ -30,5 +38,5 @@ class Author(Model):
             `password` varchar(255) NOT NULL,
             PRIMARY KEY (`id`),
             UNIQUE KEY `id` (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         """
