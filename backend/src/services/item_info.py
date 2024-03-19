@@ -1,6 +1,7 @@
 import dataclasses
+
+from db import ITEM_TABLE, TAG_TABLE, get_db
 from models.item import ItemDetails
-from db import get_db, ITEM_TABLE, TAG_TABLE
 
 
 # This is a total and insecure mess, obviously.
@@ -41,8 +42,9 @@ def get_items(
     result_raw = db.cursor.fetchall()
     results = []
     for item in result_raw:
-        item["tags"] = [s for s in item["tags"].split(",")] if item["tags"] else None
+        item["tags"] = [s for s in item["tags"].split(",")] if item["tags"] else []
         results += [ItemDetails(**item)]
+    first = max(first, 0)
     if first:
         return results[skip : skip + first]
     else:

@@ -1,5 +1,6 @@
-from instance.config.base import *
 import os
+
+from instance.config.base import *
 
 PORT = 8080
 ENVIRONMENT = "production"

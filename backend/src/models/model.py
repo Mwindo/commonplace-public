@@ -1,7 +1,8 @@
 from abc import ABC
+
+import pymysql
 from db import get_db
 from werkzeug.security import generate_password_hash
-import pymysql
 
 
 class Model(ABC):
@@ -38,11 +39,10 @@ class Model(ABC):
 
 
 def create_all_tables():
-    from .item import ItemDetails
     from .author import Author
+    from .item import ItemDetails
     from .tags import ItemTagMapping
 
-    print('CREATING ALL TABLES')
     # The order here matters because of foreign keys
     # With a proper ORM, this wouldn't be an issue.
     for model in [Author, ItemDetails, ItemTagMapping]:
@@ -51,8 +51,8 @@ def create_all_tables():
 
 # TODO: This should be moved somewhere more logical
 def create_dev_user():
-    from services.auth import add_author
     from models.author import Author
+    from services.auth import add_author
 
     try:
         # We'll make sure an Admin is available for testing

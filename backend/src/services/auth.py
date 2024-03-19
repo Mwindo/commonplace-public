@@ -1,13 +1,12 @@
-from db import get_db, AUTHOR_TABLE
-from werkzeug.security import check_password_hash, generate_password_hash
-from flask_jwt_extended import (
-    get_jwt,
-    verify_jwt_in_request,
-)
 import dataclasses
+
+from db import AUTHOR_TABLE, get_db
+from exceptions.service_exceptions import (InvalidArgumentsException,
+                                           MissingArgumentsException)
+from flask_jwt_extended import get_jwt, verify_jwt_in_request
 from models.author import Author
-from exceptions.service_exceptions import MissingArgumentsException, InvalidArgumentsException
 from pymysql import Error
+from werkzeug.security import check_password_hash, generate_password_hash
 
 MINIMUM_USERNAME_LENGTH = 4
 MINIMUM_PASSWORD_LENGTH = 5
@@ -65,7 +64,7 @@ def update_user_password(password: str, author_id: int = 1):
 
 
 def user_is_logged_in():
-    from datetime import timezone, datetime
+    from datetime import datetime, timezone
 
     try:
         verify_jwt_in_request()

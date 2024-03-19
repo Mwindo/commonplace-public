@@ -1,5 +1,6 @@
-from db import get_db, ITEM_TABLE, TAG_TABLE
-from exceptions.service_exceptions import TagTooLongException, TooManyTagsException
+from db import ITEM_TABLE, TAG_TABLE, get_db
+from exceptions.service_exceptions import (TagTooLongException,
+                                           TooManyTagsException)
 from models.item import ItemDetails
 
 MAX_TAG_LENGTH = 32
@@ -10,7 +11,7 @@ def edit_item(item: ItemDetails, commit: bool = True):
     db = get_db()
     query = (
         f"UPDATE {ITEM_TABLE} SET "
-        "`title`=%s,`description`=%s,"
+        "`title`=%s,`description`=%s,`content_url`=%s,"
         "`content`=%s, `external_location`=%s,`image_url`=%s,"
         "`thumbnail_url`=%s,`author_id`=%s,"
         "`date_updated`=CURRENT_TIMESTAMP WHERE id=%s"
@@ -20,6 +21,7 @@ def edit_item(item: ItemDetails, commit: bool = True):
         (
             item.title,
             item.description,
+            item.content_url,
             item.content,
             item.external_location,
             item.image_url,
@@ -40,7 +42,7 @@ def add_item(item: ItemDetails, commit: bool = True):
         ", `content_url`, `content`, `external_location`, "
         "`image_url`, `thumbnail_url`, `author_id`, `date_posted`,"
         "`date_updated`) VALUES (DEFAULT,%s,%s,"
-        "'',%s,%s,%s,%s,"
+        "%s,%s,%s,%s,%s,"
         "%s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);"
     )
     db.cursor.execute(
@@ -48,6 +50,7 @@ def add_item(item: ItemDetails, commit: bool = True):
         (
             item.title,
             item.description,
+            item.content_url,
             item.content,
             item.external_location,
             item.image_url,

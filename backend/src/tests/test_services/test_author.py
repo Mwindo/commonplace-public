@@ -1,32 +1,15 @@
-from services import auth
-from models.author import Author
-from conftest import *
+import pytest
+from conftest import get_test_author
 from exceptions.service_exceptions import InvalidArgumentsException
-
-
-def get_test_author(id: int) -> Author:
-    return Author(
-        id,
-        f"Test Firstname {id}",
-        f"Test Lastname {id}",
-        f"Test Nickname {id}",
-        f"Test Display Name {id}",
-        f"Test Email {id}",
-        f"Test Role {id}",
-        f"Test_Username_{id}",
-        f"Test_Password_{id}",
-    )
+from models.author import Author
+from services import auth
 
 
 def test_add_invalid_author(db):
     author = get_test_author(1)
     original_username = author.username
-    invalid_usernames = [
-        'a', 'a#4asf', 'Hey there', 'Cooluser1?'
-    ]
-    invalid_passwords = [
-        '123'
-    ]
+    invalid_usernames = ["a", "a#4asf", "Hey there", "Cooluser1?"]
+    invalid_passwords = ["123"]
     for username in invalid_usernames:
         author.username = username
         with pytest.raises(InvalidArgumentsException):

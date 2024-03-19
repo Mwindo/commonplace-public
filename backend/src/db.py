@@ -1,6 +1,5 @@
-from flask import g, current_app
 import pymysql.cursors
-
+from flask import current_app, g
 
 ITEM_TABLE = "Item"
 TAG_TABLE = "ItemTagMapping"

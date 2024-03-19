@@ -1,19 +1,10 @@
 import os
-
-from flask import Flask
-
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 
-from datetime import timedelta, datetime, timezone
-
-
-from flask_jwt_extended import JWTManager
-from flask_jwt_extended import (
-    get_jwt,
-    create_access_token,
-    set_access_cookies,
-    get_jwt_identity,
-)
+from flask import Flask
+from flask_jwt_extended import (JWTManager, create_access_token, get_jwt,
+                                get_jwt_identity, set_access_cookies)
 
 
 class AppEnvironment(Enum):
