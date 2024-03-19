@@ -14,8 +14,6 @@ class Model(ABC):
     def create_db_table(cls):
         db = get_db()
         db.cursor.execute(cls.table_creation_SQL())
-        db.cursor.execute('SHOW TABLES;')
-        print(db.cursor.fetchall())
         db.connection.commit()
 
     @classmethod

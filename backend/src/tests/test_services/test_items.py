@@ -124,8 +124,9 @@ def test_filter_items_by_tag(test_author):
     items = item_info.get_items(tag="test tag 1")
     assert len(items) == 1
     assert items[0].id == 1
-    add_edit_remove_item.add_item(get_test_item(4), ["test tag 1"])
+    add_edit_remove_item.add_item(get_test_item(4, ["test tag 1"]))
     items = item_info.get_items(tag="test tag 1")
+    print(items)
     assert len(items) == 2
     assert set(i.id for i in items) == set([1, 4])
 
