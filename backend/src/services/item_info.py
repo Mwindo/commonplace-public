@@ -1,7 +1,8 @@
 import dataclasses
 
-from db import ITEM_TABLE, TAG_TABLE, get_db
+from db import get_db
 from models.item import ItemDetails
+from models.tags import ItemTagMapping
 
 
 # This is a total and insecure mess, obviously.
@@ -31,7 +32,7 @@ def get_items(
     query = (
         f"SELECT {', '.join(fields)} FROM "
         f"(SELECT {', '.join([f for f in fields if f != 'tags'])}, GROUP_CONCAT(tag_value) as tags{search_query_part}"
-        f" FROM {ITEM_TABLE} A LEFT JOIN `ItemTagMapping` B On A.id = B.item_id{ids_part}"
+        f" FROM {ItemDetails.table_name} A LEFT JOIN {ItemTagMapping.table_name} B On A.id = B.item_id{ids_part}"
         f" GROUP BY A.id) q {filter_part}"
     )
     if tag:
@@ -53,7 +54,7 @@ def get_items(
 
 def get_tags() -> list[str]:
     db = get_db()
-    query = f"SELECT DISTINCT tag_value FROM {TAG_TABLE} ORDER BY tag_value ASC;"
+    query = f"SELECT DISTINCT tag_value FROM {ItemTagMapping.table_name} ORDER BY tag_value ASC;"
     db.cursor.execute(query)
     tags = db.cursor.fetchall()
     return [tup['tag_value'] for tup in tags]

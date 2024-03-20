@@ -7,6 +7,8 @@ from werkzeug.security import generate_password_hash
 
 class Model(ABC):
 
+    table_name = ''
+
     def __init__(self) -> None:
         pass
 
@@ -34,17 +36,6 @@ class Model(ABC):
             if getattr(self, field) != getattr(__value, field):
                 return False
         return True
-
-
-def create_all_tables():
-    from .author import Author
-    from .item import ItemDetails
-    from .tags import ItemTagMapping
-
-    # The order here matters because of foreign keys
-    # With a proper ORM, this wouldn't be an issue.
-    for model in [Author, ItemDetails, ItemTagMapping]:
-        model.create_db_table()
 
 
 # TODO: This should be moved somewhere more logical

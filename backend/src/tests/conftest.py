@@ -1,8 +1,9 @@
 import pytest
 from app import AppEnvironment, create_app
-from db import drop_all_tables, get_db
+from db import create_all_tables, drop_all_tables, get_db
 from flask import current_app
 from models.author import Author
+
 from services import auth
 from models.item import ItemDetails
 import datetime
@@ -29,7 +30,6 @@ def app():
     # Pop the context and do cleanup after the test is done
     ctx.pop()
 
-    print('tearing down')
     # Teardown / cleanup can go here
 
 
@@ -49,7 +49,6 @@ def db(app):
     """
     Setup a database session for testing, this gets executed for each test function.
     """
-    from models.model import create_all_tables
 
     # Setup the database session
     db = get_db()
@@ -84,14 +83,14 @@ def get_test_item(id: int = 1, tags: list[str] | None = None) -> ItemDetails:
     return ItemDetails(
         id,
         TEST_AUTHOR_ID,
-        f'Test Article Title {id}',
-        f'Test Article Description {id}',
-        f'Test Article External URL {id}',
-        f'Test Article Content {id}',
-        f'Test Article Content URL {id}',
-        f'Test Article Image URL {id}',
-        f'Test Article Thumbnail URL {id}',
+        f"Test Article Title {id}",
+        f"Test Article Description {id}",
+        f"Test Article External URL {id}",
+        f"Test Article Content {id}",
+        f"Test Article Content URL {id}",
+        f"Test Article Image URL {id}",
+        f"Test Article Thumbnail URL {id}",
         datetime.datetime.now(),
         datetime.datetime.now(),
-        tags or []
+        tags or [],
     )

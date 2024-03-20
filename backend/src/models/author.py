@@ -16,6 +16,8 @@ class Author(Model):
     username: str
     password: str
 
+    table_name = 'Author'
+
     def validate_fields(self) -> tuple[bool, list[str]]:
         missing_fields: list[str] = []
         for field in ['username', 'password']:
@@ -26,6 +28,7 @@ class Author(Model):
 
     @classmethod
     def table_creation_SQL(cls):
+        # This is a hack mostly for local testing. See Model::table_creation_SQL.
         return """
             CREATE TABLE IF NOT EXISTS `Author` (
             `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,

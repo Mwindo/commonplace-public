@@ -20,6 +20,8 @@ class ItemDetails(Model):
     date_updated: datetime.datetime
     tags: list[str]
 
+    table_name = 'Item'
+
     @classmethod
     def table_creation_SQL(cls):
         # This is a hack mostly for local testing. See Model::table_creation_SQL.

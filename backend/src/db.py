@@ -1,10 +1,6 @@
 import pymysql.cursors
 from flask import current_app, g
 
-ITEM_TABLE = "Item"
-TAG_TABLE = "ItemTagMapping"
-AUTHOR_TABLE = "Author"
-
 
 class database_connection:
 
@@ -32,11 +28,25 @@ def init_conn(app):
     app.teardown_appcontext(close_db)
 
 
+def create_all_tables():
+    from models.author import Author
+    from models.item import ItemDetails
+    from models.tags import ItemTagMapping
+
+    # The order here matters because of foreign keys
+    # With a proper ORM, this wouldn't be an issue.
+    for model in [Author, ItemDetails, ItemTagMapping]:
+        model.create_db_table()
+
+
 def drop_all_tables(app):
+    from models.author import Author
+    from models.item import ItemDetails
+    from models.tags import ItemTagMapping
     db = get_db()
-    db.cursor.execute("DROP TABLE IF EXISTS `ItemTagMapping`")
-    db.cursor.execute("DROP TABLE IF EXISTS `Item`")
-    db.cursor.execute("DROP TABLE IF EXISTS `Author`")
+    db.cursor.execute(f"DROP TABLE IF EXISTS `{ItemTagMapping.table_name}`")
+    db.cursor.execute(f"DROP TABLE IF EXISTS `{ItemDetails.table_name}`")
+    db.cursor.execute(f"DROP TABLE IF EXISTS `{Author.table_name}`")
     db.connection.commit()
 
 

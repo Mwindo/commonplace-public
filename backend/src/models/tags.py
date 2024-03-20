@@ -9,8 +9,11 @@ class ItemTagMapping(Model):
     tag_value: str
     item_id: int
 
+    table_name = 'ItemTagMapping'
+
     @classmethod
     def table_creation_SQL(cls):
+        # This is a hack mostly for local testing. See Model::table_creation_SQL.
         return """
             CREATE TABLE IF NOT EXISTS `ItemTagMapping` (
             `tag_value` varchar(32) NOT NULL,

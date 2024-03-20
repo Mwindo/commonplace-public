@@ -1,6 +1,6 @@
 import dataclasses
 
-from db import AUTHOR_TABLE, get_db
+from db import get_db
 from exceptions.service_exceptions import (InvalidArgumentsException,
                                            MissingArgumentsException)
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
@@ -43,7 +43,7 @@ def login(username: str, password: str) -> LoginResponse:
         return LoginResponse(status=False, error="Invalid username", id=None)
     if not validate_safe_password(password):
         return LoginResponse(status=False, error="Invalid password", id=None)
-    db.cursor.execute(f"SELECT * FROM {AUTHOR_TABLE} WHERE username = %s", (username,))
+    db.cursor.execute(f"SELECT * FROM {Author.table_name} WHERE username = %s", (username,))
     user_info = db.cursor.fetchone()
     if user_info is None:
         return LoginResponse(status=False, error="Username not found", id=None)
@@ -56,7 +56,7 @@ def login(username: str, password: str) -> LoginResponse:
 def update_user_password(password: str, author_id: int = 1):
     db = get_db()
     db.cursor.execute(
-        f"UPDATE {AUTHOR_TABLE} A SET A.password = %s WHERE A.id = %s;",
+        f"UPDATE {Author.table_name} A SET A.password = %s WHERE A.id = %s;",
         generate_password_hash(password),
         author_id,
     )
@@ -81,10 +81,9 @@ def logout():
 
 
 def add_author(author: Author, commit: bool = True, hash_password: bool = True):
-    query = f"INSERT INTO `AUTHOR` VALUES({author.id if author.id else 'DEFAULT'},"
+    query = f"INSERT INTO {Author.table_name} VALUES({author.id if author.id else 'DEFAULT'},"
     query += "%s, %s, %s, %s, %s, %s, %s, %s);"
     db = get_db()
-    db.cursor.execute("SHOW TABLES;")
 
     valid, missing_fields = author.validate_fields()
     if not valid:
@@ -125,7 +124,7 @@ def get_authors(
     first: int = 0,
     skip: int = 0,
 ):
-    query = "SELECT * FROM `AUTHOR` ORDER BY id;"
+    query = f"SELECT * FROM {Author.table_name} ORDER BY id;"
     db = get_db()
     db.cursor.execute(query)
     result_raw = db.cursor.fetchall()
@@ -145,6 +144,6 @@ def remove_author(
     Remove an author with a given id if such an author exists.
     Return the number of rows affected.
     '''
-    query = "DELETE FROM `AUTHOR` WHERE id = %s"
+    query = f"DELETE FROM {Author.table_name} WHERE id = %s"
     db = get_db()
     return db.cursor.execute(query, (id,))

@@ -1,7 +1,8 @@
-from db import ITEM_TABLE, TAG_TABLE, get_db
+from db import get_db
 from exceptions.service_exceptions import (TagTooLongException,
                                            TooManyTagsException)
 from models.item import ItemDetails
+from models.tags import ItemTagMapping
 
 MAX_TAG_LENGTH = 32
 MAX_NUM_TAGS = 12
@@ -10,7 +11,7 @@ MAX_NUM_TAGS = 12
 def edit_item(item: ItemDetails, commit: bool = True):
     db = get_db()
     query = (
-        f"UPDATE {ITEM_TABLE} SET "
+        f"UPDATE {ItemDetails.table_name} SET "
         "`title`=%s,`description`=%s,`content_url`=%s,"
         "`content`=%s, `external_location`=%s,`image_url`=%s,"
         "`thumbnail_url`=%s,`author_id`=%s,"
@@ -38,7 +39,7 @@ def edit_item(item: ItemDetails, commit: bool = True):
 def add_item(item: ItemDetails, commit: bool = True):
     db = get_db()
     query = (
-        f"INSERT INTO {ITEM_TABLE} (`id`, `title`, `description`"
+        f"INSERT INTO {ItemDetails.table_name} (`id`, `title`, `description`"
         ", `content_url`, `content`, `external_location`, "
         "`image_url`, `thumbnail_url`, `author_id`, `date_posted`,"
         "`date_updated`) VALUES (DEFAULT,%s,%s,"
@@ -70,12 +71,12 @@ def update_tags(item_id: int, tags: list[str], commit: bool = False):
         raise TooManyTagsException(f"A maximum of {MAX_NUM_TAGS} tags is allowed")
     db = get_db()
     # We remove all tags associated with the item from the mapping
-    db.cursor.execute(f"DELETE FROM {TAG_TABLE} WHERE item_id = %s;", item_id)
+    db.cursor.execute(f"DELETE FROM {ItemTagMapping.table_name} WHERE item_id = %s;", item_id)
     if cleaned_tags:
         # We add all tags now associated with the item to the mapping
         tags_mapping_string = ", ".join(["(%s, %s)" for _ in cleaned_tags])
         add_tags_mapping = (
-            f"INSERT IGNORE INTO {TAG_TABLE} values {tags_mapping_string};"
+            f"INSERT IGNORE INTO {ItemTagMapping.table_name} values {tags_mapping_string};"
         )
         db.cursor.execute(
             add_tags_mapping,
@@ -105,7 +106,7 @@ def remove_item(item_id: int, commit: bool = True):
     # We'll just rely on edits to fail if concurrent with a delete,
     # i.e., no locking. We rely on FK check to remove entries in
     # ItemTagMapping.
-    query = f"DELETE FROM {ITEM_TABLE} WHERE id = %s;"
+    query = f"DELETE FROM {ItemDetails.table_name} WHERE id = %s;"
     db.cursor.execute(query, item_id)
     if commit:
         db.connection.commit()
