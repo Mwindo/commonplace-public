@@ -57,4 +57,4 @@ def get_tags() -> list[str]:
     query = f"SELECT DISTINCT tag_value FROM {ItemTagMapping.table_name} ORDER BY tag_value ASC;"
     db.cursor.execute(query)
     tags = db.cursor.fetchall()
-    return [tup['tag_value'] for tup in tags]
+    return [tup["tag_value"] for tup in tags]

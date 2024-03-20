@@ -7,9 +7,14 @@ from ariadne.explorer import ExplorerGraphiQL
 from flask import current_app, make_response, request
 from flask.globals import current_app
 from flask.json import jsonify
-from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
-                                set_access_cookies, unset_jwt_cookies,
-                                verify_jwt_in_request)
+from flask_jwt_extended import (
+    create_access_token,
+    get_jwt,
+    get_jwt_identity,
+    set_access_cookies,
+    unset_jwt_cookies,
+    verify_jwt_in_request,
+)
 
 explorer_html = ExplorerGraphiQL().html(None)
 

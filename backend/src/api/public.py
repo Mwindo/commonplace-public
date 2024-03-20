@@ -1,8 +1,7 @@
 import dataclasses
 import datetime
 
-from ariadne import (MutationType, ObjectType, QueryType, gql,
-                     make_executable_schema)
+from ariadne import MutationType, ObjectType, QueryType, gql, make_executable_schema
 from ariadne.explorer import ExplorerGraphiQL
 from flask import session
 from flask.json import jsonify

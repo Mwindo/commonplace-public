@@ -1,6 +1,6 @@
-from services import add_edit_remove_item, item_info
-from models.item import ItemDetails
 from conftest import get_test_item
+from models.item import ItemDetails
+from services import add_edit_remove_item, item_info
 
 
 def fuzzy_item_equals(item1: "ItemDetails", item2: "ItemDetails"):

@@ -1,6 +1,5 @@
 from db import get_db
-from exceptions.service_exceptions import (TagTooLongException,
-                                           TooManyTagsException)
+from exceptions.service_exceptions import TagTooLongException, TooManyTagsException
 from models.item import ItemDetails
 from models.tags import ItemTagMapping
 
@@ -71,13 +70,13 @@ def update_tags(item_id: int, tags: list[str], commit: bool = False):
         raise TooManyTagsException(f"A maximum of {MAX_NUM_TAGS} tags is allowed")
     db = get_db()
     # We remove all tags associated with the item from the mapping
-    db.cursor.execute(f"DELETE FROM {ItemTagMapping.table_name} WHERE item_id = %s;", item_id)
+    db.cursor.execute(
+        f"DELETE FROM {ItemTagMapping.table_name} WHERE item_id = %s;", item_id
+    )
     if cleaned_tags:
         # We add all tags now associated with the item to the mapping
         tags_mapping_string = ", ".join(["(%s, %s)" for _ in cleaned_tags])
-        add_tags_mapping = (
-            f"INSERT IGNORE INTO {ItemTagMapping.table_name} values {tags_mapping_string};"
-        )
+        add_tags_mapping = f"INSERT IGNORE INTO {ItemTagMapping.table_name} values {tags_mapping_string};"
         db.cursor.execute(
             add_tags_mapping,
             [param for tag in cleaned_tags for param in (tag, item_id)],

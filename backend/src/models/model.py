@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash
 
 class Model(ABC):
 
-    table_name = ''
+    table_name = ""
 
     def __init__(self) -> None:
         pass
@@ -29,8 +29,9 @@ class Model(ABC):
     # For models, we probably don't care about equality by reference.
     # Therefore, we override __eq__ for easy testing.
     def __eq__(self, __value: object) -> bool:
-        if type(self) != type(__value): return False
-        fields = [field for field in dir(self) if not field.startswith('_')]
+        if type(self) != type(__value):
+            return False
+        fields = [field for field in dir(self) if not field.startswith("_")]
         for field in fields:
             if getattr(self, field) != getattr(__value, field):
                 return False

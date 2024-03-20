@@ -1,7 +1,7 @@
 import dataclasses
 
-from models.model import Model
 from models.item import ItemDetails
+from models.model import Model
 
 
 # This should match the ItemTagMapping DB schema
@@ -10,7 +10,7 @@ class ItemTagMapping(Model):
     tag_value: str
     item_id: int
 
-    table_name = 'ItemTagMapping'
+    table_name = "ItemTagMapping"
 
     @classmethod
     def table_creation_SQL(cls):

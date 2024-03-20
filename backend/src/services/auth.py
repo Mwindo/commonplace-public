@@ -1,8 +1,10 @@
 import dataclasses
 
 from db import get_db
-from exceptions.service_exceptions import (InvalidArgumentsException,
-                                           MissingArgumentsException)
+from exceptions.service_exceptions import (
+    InvalidArgumentsException,
+    MissingArgumentsException,
+)
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
 from models.author import Author
 from pymysql import Error
@@ -28,11 +30,11 @@ def validate_login_string(string: str, min_length: int) -> tuple[bool, str]:
     return all(char in allowed_chars for char in string)
 
 
-def validate_safe_username(username: str):
+def validate_safe_username(username: str) -> tuple[bool, str]:
     return validate_login_string(username, MINIMUM_USERNAME_LENGTH)
 
 
-def validate_safe_password(password: str):
+def validate_safe_password(password: str) -> tuple[bool, str]:
     return validate_login_string(password, MINIMUM_PASSWORD_LENGTH)
 
 
@@ -43,14 +45,16 @@ def login(username: str, password: str) -> LoginResponse:
         return LoginResponse(status=False, error="Invalid username", id=None)
     if not validate_safe_password(password):
         return LoginResponse(status=False, error="Invalid password", id=None)
-    db.cursor.execute(f"SELECT * FROM {Author.table_name} WHERE username = %s", (username,))
+    db.cursor.execute(
+        f"SELECT * FROM {Author.table_name} WHERE username = %s", (username,)
+    )
     user_info = db.cursor.fetchone()
     if user_info is None:
         return LoginResponse(status=False, error="Username not found", id=None)
-    elif not check_password_hash(user_info['password'], password):
+    elif not check_password_hash(user_info["password"], password):
         return LoginResponse(status=False, error="Incorrect password", id=None)
 
-    return LoginResponse(status=True, error="", id=int(user_info['id']))
+    return LoginResponse(status=True, error="", id=int(user_info["id"]))
 
 
 def update_user_password(password: str, author_id: int = 1):
@@ -63,7 +67,7 @@ def update_user_password(password: str, author_id: int = 1):
     db.connection.commit()
 
 
-def user_is_logged_in():
+def user_is_logged_in() -> bool:
     from datetime import datetime, timezone
 
     try:
@@ -93,13 +97,9 @@ def add_author(author: Author, commit: bool = True, hash_password: bool = True):
 
     if not validate_safe_username(author.username):
         # TODO: If user-facing, the error messages here need to be more granular
-        raise InvalidArgumentsException(
-            'Username is invalid'
-        )
+        raise InvalidArgumentsException("Username is invalid")
     if not validate_safe_password(author.password):
-        raise InvalidArgumentsException(
-            "Password is invalid"
-        )
+        raise InvalidArgumentsException("Password is invalid")
 
     db.cursor.execute(
         query,
@@ -113,7 +113,11 @@ def add_author(author: Author, commit: bool = True, hash_password: bool = True):
             author.email or "",
             author.role or "",
             author.username,
-            generate_password_hash(author.password) if hash_password else author.password,
+            (
+                generate_password_hash(author.password)
+                if hash_password
+                else author.password
+            ),
         ),
     )
     if commit:
@@ -123,7 +127,7 @@ def add_author(author: Author, commit: bool = True, hash_password: bool = True):
 def get_authors(
     first: int = 0,
     skip: int = 0,
-):
+) -> list[Author]:
     query = f"SELECT * FROM {Author.table_name} ORDER BY id;"
     db = get_db()
     db.cursor.execute(query)
@@ -137,13 +141,11 @@ def get_authors(
         return results[skip:]
 
 
-def remove_author(
-    id: int
-) -> int:
-    '''
+def remove_author(id: int) -> int:
+    """
     Remove an author with a given id if such an author exists.
     Return the number of rows affected.
-    '''
+    """
     query = f"DELETE FROM {Author.table_name} WHERE id = %s"
     db = get_db()
     return db.cursor.execute(query, (id,))

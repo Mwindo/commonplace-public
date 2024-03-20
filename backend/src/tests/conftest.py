@@ -1,13 +1,12 @@
+import datetime
+
 import pytest
 from app import AppEnvironment, create_app
 from db import create_all_tables, drop_all_tables, get_db
 from flask import current_app
 from models.author import Author
-
-from services import auth
 from models.item import ItemDetails
-import datetime
-
+from services import auth
 
 TEST_AUTHOR_ID = 1
 

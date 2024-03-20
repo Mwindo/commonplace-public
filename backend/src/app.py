@@ -3,8 +3,13 @@ from datetime import datetime, timedelta, timezone
 from enum import Enum
 
 from flask import Flask
-from flask_jwt_extended import (JWTManager, create_access_token, get_jwt,
-                                get_jwt_identity, set_access_cookies)
+from flask_jwt_extended import (
+    JWTManager,
+    create_access_token,
+    get_jwt,
+    get_jwt_identity,
+    set_access_cookies,
+)
 
 
 class AppEnvironment(Enum):
@@ -27,11 +32,11 @@ def create_app(environment: str | None = None):
         import db
         import router  # This is needed, otherwise we will return 404s
         from models import model
-        
+
         db.init_conn(app)
 
-        # Setup the DB for local development
-        if app.config['ENVIRONMENT'] in [AppEnvironment.DEV.value]:
+        # Set up the DB for local development
+        if app.config["ENVIRONMENT"] in [AppEnvironment.DEV.value]:
             model.create_all_tables()
             # We'll initialize a local admin for dev testing
             model.create_dev_user()

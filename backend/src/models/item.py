@@ -1,8 +1,8 @@
 import dataclasses
 import datetime
 
-from models.model import Model
 from models.author import Author
+from models.model import Model
 
 
 # This should match the ItemDetails DB schema
@@ -21,7 +21,7 @@ class ItemDetails(Model):
     date_updated: datetime.datetime
     tags: list[str]
 
-    table_name = 'Item'
+    table_name = "Item"
 
     @classmethod
     def table_creation_SQL(cls):

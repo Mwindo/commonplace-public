@@ -16,11 +16,11 @@ class Author(Model):
     username: str
     password: str
 
-    table_name = 'Author'
+    table_name = "Author"
 
     def validate_fields(self) -> tuple[bool, list[str]]:
         missing_fields: list[str] = []
-        for field in ['username', 'password']:
+        for field in ["username", "password"]:
             if not getattr(self, field):
                 missing_fields.append(field)
         valid = False if missing_fields else True

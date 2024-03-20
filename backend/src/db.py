@@ -43,6 +43,7 @@ def drop_all_tables(app):
     from models.author import Author
     from models.item import ItemDetails
     from models.tags import ItemTagMapping
+
     db = get_db()
     db.cursor.execute(f"DROP TABLE IF EXISTS `{ItemTagMapping.table_name}`")
     db.cursor.execute(f"DROP TABLE IF EXISTS `{ItemDetails.table_name}`")
