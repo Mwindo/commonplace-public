@@ -5,6 +5,7 @@
 /frontend/.pnp
 /frontend/.pnp.js
 **/__pycache__/
+/backend/venv
 /*.env
 /data
 

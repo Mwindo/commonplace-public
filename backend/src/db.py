@@ -1,30 +1,54 @@
-from flask import g
-from flaskext.mysql import MySQL
-
-mysql = MySQL()
-
-
-ITEM_TABLE = "Item"
-TAG_TABLE = "ItemTagMapping"
-AUTHOR_TABLE = "Author"
+import pymysql.cursors
+from flask import current_app, g
 
 
 class database_connection:
 
-    def __init__(self):
-        self.connection = mysql.connect()
+    connection: pymysql.Connection
+
+    def __init__(self, app):
+        self.connection = pymysql.connect(
+            host=app.config["MYSQL_DATABASE_HOST"],
+            user=app.config["MYSQL_DATABASE_USER"],
+            password=app.config["MYSQL_DATABASE_PASSWORD"],
+            database=app.config["MYSQL_DATABASE_DB"],
+            cursorclass=pymysql.cursors.DictCursor,
+        )
         self.cursor = self.connection.cursor()
 
 
 def get_db():
     if "db" not in g:
-        g.db = database_connection()
+        g.db = database_connection(current_app)
     return g.db
 
 
 def init_conn(app):
-    mysql.init_app(app)
+    g.db = database_connection(app)
     app.teardown_appcontext(close_db)
+
+
+def create_all_tables():
+    from models.author import Author
+    from models.item import ItemDetails
+    from models.tags import ItemTagMapping
+
+    # The order here matters because of foreign keys
+    # With a proper ORM, this wouldn't be an issue.
+    for model in [Author, ItemDetails, ItemTagMapping]:
+        model.create_db_table()
+
+
+def drop_all_tables(app):
+    from models.author import Author
+    from models.item import ItemDetails
+    from models.tags import ItemTagMapping
+
+    db = get_db()
+    db.cursor.execute(f"DROP TABLE IF EXISTS `{ItemTagMapping.table_name}`")
+    db.cursor.execute(f"DROP TABLE IF EXISTS `{ItemDetails.table_name}`")
+    db.cursor.execute(f"DROP TABLE IF EXISTS `{Author.table_name}`")
+    db.connection.commit()
 
 
 def close_db(e=None):

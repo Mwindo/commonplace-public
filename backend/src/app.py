@@ -1,24 +1,21 @@
 import os
-
-from flask import Flask
-
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 
-from datetime import timedelta, datetime, timezone
-
-
-from flask_jwt_extended import JWTManager
+from flask import Flask
 from flask_jwt_extended import (
-    get_jwt,
+    JWTManager,
     create_access_token,
-    set_access_cookies,
+    get_jwt,
     get_jwt_identity,
+    set_access_cookies,
 )
 
 
 class AppEnvironment(Enum):
     DEV = "dev"
     PRODUCTION = "production"
+    TEST = "test"
 
 
 def create_app(environment: str | None = None):
@@ -35,21 +32,19 @@ def create_app(environment: str | None = None):
         import db
         import router  # This is needed, otherwise we will return 404s
         from models import model
-        
+
         db.init_conn(app)
 
-        # Make sure dev DB has the tables and dev user
-        if app.config['ENVIRONMENT'] == AppEnvironment.DEV.value:
+        # Set up the DB for local development
+        if app.config["ENVIRONMENT"] in [AppEnvironment.DEV.value]:
             model.create_all_tables()
+            # We'll initialize a local admin for dev testing
             model.create_dev_user()
 
-        return app
+    return app
 
 
-app = create_app()
-
-
-def print_startup_string():
+def print_startup_string(app):
     print("Starting server...")
     print("------------------")
     print(f'ENVIRONMENT: {app.config["ENVIRONMENT"]}')
@@ -57,23 +52,5 @@ def print_startup_string():
 
 
 if __name__ == "__main__":
-    print_startup_string()
+    app = create_app()
     app.run(threaded=True, host="0.0.0.0", port=5000, debug=True)
-
-
-# Using an `after_request` callback, we refresh any token that is within 30
-# minutes of expiring. Change the timedeltas to match the needs of your application.
-# TODO: This isn't ever being hit?
-@app.after_request
-def refresh_expiring_jwts(response):
-    try:
-        exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
-        if target_timestamp > exp_timestamp:
-            access_token = create_access_token(identity=get_jwt_identity())
-            set_access_cookies(response, access_token)
-        return response
-    except (RuntimeError, KeyError):
-        # Case where there is not a valid JWT. Just return the original response
-        return response

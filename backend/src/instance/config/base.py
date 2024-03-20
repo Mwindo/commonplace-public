@@ -1,5 +1,5 @@
-from datetime import timedelta
 import os
+from datetime import timedelta
 
 # Define the database connection
 MYSQL_DATABASE_USER = os.environ.get("DATABASE_USER")

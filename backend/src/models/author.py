@@ -1,4 +1,5 @@
 import dataclasses
+
 from models.model import Model
 
 
@@ -15,10 +16,21 @@ class Author(Model):
     username: str
     password: str
 
+    table_name = "Author"
+
+    def validate_fields(self) -> tuple[bool, list[str]]:
+        missing_fields: list[str] = []
+        for field in ["username", "password"]:
+            if not getattr(self, field):
+                missing_fields.append(field)
+        valid = False if missing_fields else True
+        return valid, missing_fields
+
     @classmethod
     def table_creation_SQL(cls):
-        return """
-            CREATE TABLE IF NOT EXISTS `Author` (
+        # This is a hack mostly for local testing. See Model::table_creation_SQL.
+        return f"""
+            CREATE TABLE IF NOT EXISTS `{Author.table_name}` (
             `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             `first_name` varchar(32) NOT NULL,
             `last_name` varchar(32) NOT NULL,
@@ -30,5 +42,5 @@ class Author(Model):
             `password` varchar(255) NOT NULL,
             PRIMARY KEY (`id`),
             UNIQUE KEY `id` (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         """

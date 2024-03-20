@@ -1,6 +1,8 @@
 import dataclasses
+
+from db import get_db
 from models.item import ItemDetails
-from db import get_db, ITEM_TABLE, TAG_TABLE
+from models.tags import ItemTagMapping
 
 
 # This is a total and insecure mess, obviously.
@@ -30,7 +32,7 @@ def get_items(
     query = (
         f"SELECT {', '.join(fields)} FROM "
         f"(SELECT {', '.join([f for f in fields if f != 'tags'])}, GROUP_CONCAT(tag_value) as tags{search_query_part}"
-        f" FROM {ITEM_TABLE} A LEFT JOIN `ItemTagMapping` B On A.id = B.item_id{ids_part}"
+        f" FROM {ItemDetails.table_name} A LEFT JOIN {ItemTagMapping.table_name} B On A.id = B.item_id{ids_part}"
         f" GROUP BY A.id) q {filter_part}"
     )
     if tag:
@@ -38,15 +40,12 @@ def get_items(
     query += f"{order_by};"
     db = get_db()
     db.cursor.execute(query)
-    columns = db.cursor.description
-    result_raw = [
-        {columns[index][0]: column for index, column in enumerate(value)}
-        for value in db.cursor.fetchall()
-    ]
+    result_raw = db.cursor.fetchall()
     results = []
     for item in result_raw:
-        item["tags"] = [s for s in item["tags"].split(",")] if item["tags"] else None
+        item["tags"] = [s for s in item["tags"].split(",")] if item["tags"] else []
         results += [ItemDetails(**item)]
+    first = max(first, 0)
     if first:
         return results[skip : skip + first]
     else:
@@ -55,7 +54,7 @@ def get_items(
 
 def get_tags() -> list[str]:
     db = get_db()
-    query = f"SELECT DISTINCT tag_value FROM {TAG_TABLE} ORDER BY tag_value ASC;"
+    query = f"SELECT DISTINCT tag_value FROM {ItemTagMapping.table_name} ORDER BY tag_value ASC;"
     db.cursor.execute(query)
     tags = db.cursor.fetchall()
-    return [tup[0] for tup in tags]
+    return [tup["tag_value"] for tup in tags]

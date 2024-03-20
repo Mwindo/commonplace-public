@@ -1,20 +1,20 @@
+from datetime import datetime, timedelta, timezone
+
+import api.public as public_schema
+from app import AppEnvironment
 from ariadne import graphql_sync
 from ariadne.explorer import ExplorerGraphiQL
-import api.public as public_schema
-from flask import request, make_response, current_app
+from flask import current_app, make_response, request
 from flask.globals import current_app
 from flask.json import jsonify
 from flask_jwt_extended import (
     create_access_token,
+    get_jwt,
+    get_jwt_identity,
     set_access_cookies,
     unset_jwt_cookies,
-    get_jwt_identity,
-    get_jwt,
     verify_jwt_in_request,
 )
-from datetime import timedelta, datetime, timezone
-from app import AppEnvironment
-
 
 explorer_html = ExplorerGraphiQL().html(None)
 

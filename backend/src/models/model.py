@@ -1,10 +1,13 @@
 from abc import ABC
+
+import pymysql
 from db import get_db
 from werkzeug.security import generate_password_hash
-import pymysql
 
 
 class Model(ABC):
+
+    table_name = ""
 
     def __init__(self) -> None:
         pass
@@ -23,30 +26,37 @@ class Model(ABC):
         """
         raise NotImplementedError("Model must implement create DB table")
 
-
-def create_all_tables():
-    from .item import ItemDetails
-    from .author import Author
-    from .tags import ItemTagMapping
-    from db import get_db
-
-    # The order here matters because of foreign keys
-    # With a proper ORM, this wouldn't be an issue.
-    for model in [Author, ItemDetails, ItemTagMapping]:
-        model.create_db_table()
+    # For models, we probably don't care about equality by reference.
+    # Therefore, we override __eq__ for easy testing.
+    def __eq__(self, __value: object) -> bool:
+        if type(self) != type(__value):
+            return False
+        fields = [field for field in dir(self) if not field.startswith("_")]
+        for field in fields:
+            if getattr(self, field) != getattr(__value, field):
+                return False
+        return True
 
 
 # TODO: This should be moved somewhere more logical
 def create_dev_user():
-    db = get_db()
+    from models.author import Author
+    from services.auth import add_author
+
     try:
         # We'll make sure an Admin is available for testing
-        password_hash = generate_password_hash("TestPassword")
-        db.cursor.execute(
-            f"INSERT INTO AUTHOR VALUES(1, 'Test', \
-            'User', 'Tester', 'Test User', 'fakeemail@123.com', \
-            'Admin', 'Admin', '{password_hash}');"
+        add_author(
+            Author(
+                1,
+                "Test",
+                "User",
+                "Test User",
+                "Test User",
+                "fakeemail123@host.com",
+                "Admin",
+                "Admin",
+                "TestPassword",
+            )
         )
-        db.connection.commit()
     except pymysql.err.IntegrityError:
         pass

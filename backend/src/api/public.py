@@ -5,14 +5,10 @@ from ariadne import MutationType, ObjectType, QueryType, gql, make_executable_sc
 from ariadne.explorer import ExplorerGraphiQL
 from flask import session
 from flask.json import jsonify
-from flask_jwt_extended import (
-    jwt_required,
-    get_jwt_identity,
-)
-from services import auth
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from models.item import ItemDetails
-from services import add_edit_remove_item, item_info
+from services import add_edit_remove_item, auth, item_info
+from werkzeug.security import check_password_hash, generate_password_hash
 
 type_defs = gql(
     """
@@ -174,7 +170,7 @@ def resolve_add_or_edit_item(_, info, data: dict):
         description=data["description"],
         external_location=data["external_url"],
         content=data["content"],
-        content_url="",
+        content_url=data["content_url"],
         image_url=data["image_url"],
         thumbnail_url=data["thumbnail_url"],
         date_posted=None,
