@@ -29,8 +29,8 @@ class Author(Model):
     @classmethod
     def table_creation_SQL(cls):
         # This is a hack mostly for local testing. See Model::table_creation_SQL.
-        return """
-            CREATE TABLE IF NOT EXISTS `Author` (
+        return f"""
+            CREATE TABLE IF NOT EXISTS `{Author.table_name}` (
             `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             `first_name` varchar(32) NOT NULL,
             `last_name` varchar(32) NOT NULL,

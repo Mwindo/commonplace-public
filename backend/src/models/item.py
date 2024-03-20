@@ -2,6 +2,7 @@ import dataclasses
 import datetime
 
 from models.model import Model
+from models.author import Author
 
 
 # This should match the ItemDetails DB schema
@@ -25,8 +26,8 @@ class ItemDetails(Model):
     @classmethod
     def table_creation_SQL(cls):
         # This is a hack mostly for local testing. See Model::table_creation_SQL.
-        return """
-        CREATE TABLE IF NOT EXISTS `Item` (
+        return f"""
+        CREATE TABLE IF NOT EXISTS `{ItemDetails.table_name}` (
             `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
             `title` varchar(255) NOT NULL,
             `description` varchar(255) DEFAULT NULL,
@@ -42,7 +43,8 @@ class ItemDetails(Model):
             KEY `ItemAuthorId` (`author_id`),
             FULLTEXT KEY `content` (`content`),
             FULLTEXT KEY `title` (`title`),
-            CONSTRAINT `ItemAuthorId` FOREIGN KEY (`author_id`) REFERENCES `Author` (`id`) ON UPDATE CASCADE
+            CONSTRAINT `ItemAuthorId` FOREIGN KEY (`author_id`) 
+            REFERENCES `{Author.table_name}` (`id`) ON UPDATE CASCADE
         );
         """
 
