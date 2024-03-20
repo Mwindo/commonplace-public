@@ -20,7 +20,7 @@ docker-compose -f docker-compose-dev.yaml up
 
 and navigate to [dev.commonplace.com](http://dev.commonplace.com).
 
-To log into the local dev db, navigate to [dev.commonplace.com/admin](http://dev.commonplace.com/admin) and enter username Admin and password TestPassword. 
+To log in locally for development, navigate to [dev.commonplace.com/admin](http://dev.commonplace.com/admin) and enter username Admin and password TestPassword. 
 
 ## Deployment
 
