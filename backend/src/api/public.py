@@ -170,7 +170,7 @@ def resolve_add_or_edit_item(_, info, data: dict):
         description=data["description"],
         external_location=data["external_url"],
         content=data["content"],
-        content_url=data["content_url"],
+        content_url=data.get("content_url") or '',
         image_url=data["image_url"],
         thumbnail_url=data["thumbnail_url"],
         date_posted=None,

@@ -51,6 +51,29 @@ def drop_all_tables(app):
     db.connection.commit()
 
 
+def create_dev_user():
+    from models.author import Author
+    from services.auth import add_author
+
+    try:
+        # We'll make sure an Admin is available for testing
+        add_author(
+            Author(
+                1,
+                "Test",
+                "User",
+                "Test User",
+                "Test User",
+                "fakeemail123@host.com",
+                "Admin",
+                "Admin",
+                "TestPassword",
+            )
+        )
+    except pymysql.err.IntegrityError:
+        pass
+
+
 def close_db(e=None):
     db = g.pop("db", None)
     if db is not None:

@@ -2,7 +2,7 @@ ariadne==0.22
 Flask==2.3.3
 Flask-JWT-Extended==4.6.0
 gunicorn==21.2.0
-pytest-flask
 pytest
+pytest-flask
 PyMySQL
 PyMySQL[rsa]
