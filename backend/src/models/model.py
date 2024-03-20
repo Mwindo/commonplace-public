@@ -29,7 +29,6 @@ class Model(ABC):
     # For models, we probably don't care about equality by reference.
     # Therefore, we override __eq__ for easy testing.
     def __eq__(self, __value: object) -> bool:
-        print('HERE EQ')
         if type(self) != type(__value): return False
         fields = [field for field in dir(self) if not field.startswith('_')]
         for field in fields:
