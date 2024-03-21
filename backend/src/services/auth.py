@@ -39,9 +39,11 @@ def validate_safe_password(password: str) -> tuple[bool, str]:
 
 
 def login(username: str, password: str) -> LoginResponse:
-    from services.add_edit_remove_item import add_item
-    from models.item import ItemDetails
     import datetime
+
+    from models.item import ItemDetails
+    from services.add_edit_remove_item import add_item
+
     """Check that the full login info is correct (in the DB)."""
     db = get_db()
     if not validate_safe_username(username):
