@@ -8,9 +8,6 @@ import LoadingIcon from "./LoadingIcon";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { ADD_ITEM_ID } from "./utilities/itemCardUtilities";
 import { GQLQueryContext } from "./requests/GQLQueryProvider";
-import MessageBox from "./modals/MessageBox";
-import { MakeSplitStringComponent } from "./utilities/stringOperations";
-import textStyles from "../styling/TextStyles.module.css";
 import { setItemCardPreviewData } from "./utilities/itemCardPreview";
 
 // TODO: Consider using React Hook Form (or Formik, although I haven't loved it in the past) and yup.
