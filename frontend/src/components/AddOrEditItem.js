@@ -55,12 +55,7 @@ const splitTagString = (tagString) => {
 };
 
 function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
-  const {
-    showErrorMessage,
-    closeAllModals,
-    showAlertDialogue,
-    closeAlertDialogue,
-  } = useContext(ModalContext);
+  const { showErrorMessage, closeAllModals } = useContext(ModalContext);
 
   // We keep track of the original input values and the current input values
   // to check if the form is dirty.
@@ -111,7 +106,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
     queryKey: ["existing_data"],
     queryFn: fetchExistingItemData,
     enabled: itemId !== ADD_ITEM_ID,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false, // We do not want to overwrite the user's entry
   });
 
   // The request for updating the item with what the user has entered.
@@ -149,6 +144,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
   }, [tagsearch]);
 
   const handlePreviewClicked = (e) => {
+    // We will save the preview data to storage and load it in a new window
     e.preventDefault();
     setItemCardPreviewData(JSON.stringify(inputValues));
     window.open("/preview");
