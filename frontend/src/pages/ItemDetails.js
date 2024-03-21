@@ -24,10 +24,12 @@ const itemDetailsQuery = gql`
   }
 `;
 
-function ItemDetailsPage() {
+function ItemDetailsPage({ previewData }) {
   /*
     This page displays an item in its full form, i.e., with the content.
     In other words, this is a commonplace article.
+    If previewData is passed in, we display that. Otherwise, we load
+    data from the server.
   */
 
   const { itemId } = useParams();
@@ -36,6 +38,9 @@ function ItemDetailsPage() {
 
   // The function for getting the details from the backend
   const fetchItemData = async () => {
+    if (previewData) {
+      return previewData;
+    }
     const data = await gqlFetch(itemDetailsQuery, {
       ids: [parseInt(itemId)],
     });
@@ -49,7 +54,7 @@ function ItemDetailsPage() {
 
   // TODO: distinguish between not found and network error
   if (
-    !itemId || // If there is no item id, then we can't find it
+    (!itemId && !previewData) || // If there is no item id, then we can't find it. But we don't need the itemId if we have previewData passed in.
     itemDetailsData.isError || // If there is an error, either the id does not exist or we have a network issue
     (!itemDetailsData.isFetching && !itemDetailsData.data) // Seems redundant? isError doesn't seem to work when one navigates to another tab and then comes back.
   ) {

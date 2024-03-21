@@ -8,6 +8,7 @@ import LoadingIcon from "./LoadingIcon";
 import { Navigate, useSearchParams } from "react-router-dom";
 import { ADD_ITEM_ID } from "./utilities/itemCardUtilities";
 import { GQLQueryContext } from "./requests/GQLQueryProvider";
+import { setItemCardPreviewData } from "./utilities/itemCardPreview";
 
 // TODO: Consider using React Hook Form (or Formik, although I haven't loved it in the past) and yup.
 
@@ -105,6 +106,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
     queryKey: ["existing_data"],
     queryFn: fetchExistingItemData,
     enabled: itemId !== ADD_ITEM_ID,
+    refetchOnWindowFocus: false, // We do not want to overwrite the user's entry
   });
 
   // The request for updating the item with what the user has entered.
@@ -141,6 +143,13 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
     updateInputValue("tags", [tagsearch]);
   }, [tagsearch]);
 
+  const handlePreviewClicked = (e) => {
+    // We will save the preview data to storage and load it in a new window
+    e.preventDefault();
+    setItemCardPreviewData(JSON.stringify(inputValues));
+    window.open("/preview");
+  };
+
   // If we are loading data, show the loading icon.
   if (
     addOrEditItemFieldsData.isLoading ||
@@ -159,7 +168,9 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
   // If we are not loading, show the form.
   return (
     <div className={classes.add_or_edit_item_container}>
-      <h2 role="heading">{itemId !== ADD_ITEM_ID ? "Editing Item" : "Adding Item"}</h2>
+      <h2 role="heading">
+        {itemId !== ADD_ITEM_ID ? "Editing Item" : "Adding Item"}
+      </h2>
       <form onSubmit={handleSubmitAddOrEdit}>
         <fieldset
           className={classes.fieldset}
@@ -215,6 +226,12 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
               ) : (
                 "Save"
               )}
+            </button>
+            <button
+              className={classes.preview_button}
+              onClick={handlePreviewClicked}
+            >
+              Preview
             </button>
           </div>
         </fieldset>

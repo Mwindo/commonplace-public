@@ -36,4 +36,3 @@ class Model(ABC):
             if getattr(self, field) != getattr(__value, field):
                 return False
         return True
-
