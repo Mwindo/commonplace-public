@@ -10,6 +10,7 @@ import NetworkErrorPage from "../../pages/NetworkError";
 
 import { AnimatePresence } from "framer-motion";
 import LoggOutPage from "../../pages/LoggedOut";
+import PreviewItemPage from "../../pages/PreviewItemDetails";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -22,6 +23,7 @@ function AnimatedRoutes() {
           <Route path=":itemId" element={<ItemDetailsPage />} />
         </Route>
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/preview" element={<PreviewItemPage />} />
         <Route path="/admin" element={<LoginPage />} />
         <Route path="/networkerror" element={<NetworkErrorPage />} />
         <Route path="/alligator" element={<LoggOutPage />} />

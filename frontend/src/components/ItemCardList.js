@@ -38,6 +38,15 @@ function ItemCardList({
       setPage(0);
   }, []);
 
+  /*
+    Reset pagination when there is no page URL param.
+   */
+  useEffect(() => {
+    if (!pageURLParam) {
+      setPage(0);
+    }
+}, [pageURLParam]);
+
   const numPages = Math.ceil(children.length / MAX_PAGE_SIZE);
 
   const getPageData = (page) => {
