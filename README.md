@@ -24,7 +24,13 @@ To log in locally for development, navigate to [dev.commonplace.com/admin](http:
 
 ## Deployment
 
-This is a personal project, so deployment details are left vague. Since it is small, I'm currently spinning it up as a small VM with the Google Compute Engine.
+This is a personal project, so deployment details are intentionally left vague. Since it is small, I'm currently spinning it up as a small VM with the Google Compute Engine.
+
+## Quick and Terrible Demo
+
+
+https://github.com/Mwindo/commonplace-public/assets/47676832/6c5bd460-cf2d-49ae-8e3c-557d26f876e4
+
 
 ## TODO:
 
