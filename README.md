@@ -28,6 +28,7 @@ This is a personal project, so deployment details are intentionally left vague. 
 
 ## Quick and Terrible Demo
 
+(Ignore the title numbers, which were randomly generated and don't actually correspond to any particular order.)
 
 https://github.com/Mwindo/commonplace-public/assets/47676832/3a1b44e7-f2c6-47ef-97c3-0b9adb6e69f0
 
