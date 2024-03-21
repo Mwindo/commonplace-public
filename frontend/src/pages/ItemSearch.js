@@ -21,6 +21,7 @@ const itemsQuery = gql`
         title
         author
         description
+        image_url
         thumbnail_url
         tags
       }
@@ -191,7 +192,7 @@ function ItemSearchPage() {
             <ItemCard
               key={item["id"]}
               itemId={item["id"]}
-              itemImage={item["thumbnail_url"]}
+              itemImage={item["thumbnail_url"] || item["image_url"]}
               itemTitle={item["title"]}
               itemDescription={item["description"]}
               reloadItems={reloadItems}
