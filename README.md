@@ -29,7 +29,7 @@ This is a personal project, so deployment details are intentionally left vague. 
 ## Quick and Terrible Demo
 
 
-https://github.com/Mwindo/commonplace-public/assets/47676832/6c5bd460-cf2d-49ae-8e3c-557d26f876e4
+https://github.com/Mwindo/commonplace-public/assets/47676832/3a1b44e7-f2c6-47ef-97c3-0b9adb6e69f0
 
 
 ## TODO:
