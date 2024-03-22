@@ -1,4 +1,4 @@
-function NetworkErrorPage(props) {
+function NetworkErrorPage() {
   return (
     <div>
       <h2>We're having trouble contacting the backend servers.</h2>

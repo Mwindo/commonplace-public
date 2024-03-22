@@ -117,8 +117,8 @@ function ItemSearchPage() {
 
   const { gqlFetch } = useContext(GQLQueryContext);
 
-  const sendRemoveItemRequest = async (id) => {
-    return await gqlFetch(removeItemMutation, id);
+  const sendRemoveItemRequest = async (id: number) => {
+    return await gqlFetch(removeItemMutation, { id });
   };
 
   const removeItem = useMutation({
@@ -127,7 +127,7 @@ function ItemSearchPage() {
   });
 
   // This would be a good place for useCallback if performance issues arise.
-  const onSearch = (value) => {
+  const onSearch = (value: string) => {
     if (searchBarText === value) return; // Nothing to update
     setSearchBarText(value); // Otherwise, keep the search text state and its corresponding query param in sync
     searchParams.delete("textsearch");
@@ -137,7 +137,7 @@ function ItemSearchPage() {
 
   // This function is very similar to onSearch.
   // If more of this functionality is needed, abstract the logic into a separate function.
-  const onTagSelect = (value) => {
+  const onTagSelect = (value: string) => {
     if (selectedTag === value) return; // Nothing to update
     setSelectedTag(value); // Otherwise, keep the selected tag state and its corresponding query param in sync
     searchParams.delete("tagsearch");
@@ -170,7 +170,7 @@ function ItemSearchPage() {
       ) : (
         <SearchBar
           // This would be a good opportunity for useMemo if performance issues arise.
-          tagOptions={tagsData.data["get_tags"].map((tag) => {
+          tagOptions={tagsData.data["get_tags"].map((tag: string) => {
             return { value: tag, label: tag }; // this is the expected format for react-select
           })}
           selectedTag={selectedTag}
@@ -188,7 +188,7 @@ function ItemSearchPage() {
           pageIncrementText={searchBarText ? "Less relevant" : "Older"}
           showCount={searchBarText + selectedTag ? true : false}
         >
-          {itemsData["data"].map((item) => (
+          {itemsData["data"].map((item: any) => (
             <ItemCard
               key={item["id"]}
               itemId={item["id"]}
@@ -196,7 +196,9 @@ function ItemSearchPage() {
               itemTitle={item["title"]}
               itemDescription={item["description"]}
               reloadItems={reloadItems}
-              onDelete={() => removeItem.mutate({ id: item["id"] })}
+              onDelete={() => {
+                removeItem.mutate(parseInt(item["id"]));
+              }}
             />
           ))}
         </ItemCardList>

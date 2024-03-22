@@ -1,12 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import { useContext, useRef } from "react";
+import { FormEventHandler, useContext, useRef } from "react";
 import { LoginContext } from "../components/auth/Auth";
 import classes from "./Login.module.css";
 import LoadingIcon from "../components/LoadingIcon";
 
-function LoginPage(props) {
-  const usernameBox = useRef();
-  const passwordBox = useRef();
+function LoginPage() {
+  const usernameBox = useRef<HTMLInputElement>(null);
+  const passwordBox = useRef<HTMLInputElement>(null);
 
   const { isAuth, login } = useContext(LoginContext);
 
@@ -14,11 +14,11 @@ function LoginPage(props) {
     mutationFn: login,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
     loginMutation.mutate({
-      username: usernameBox.current.value,
-      password: passwordBox.current.value,
+      username: usernameBox.current?.value || "",
+      password: passwordBox.current?.value || "",
     });
   };
 

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import classes from "./ItemCard.module.css";
-import { useContext, useEffect, useState } from "react";
+import { MouseEventHandler, useContext, useEffect, useState } from "react";
 import { LoginContext } from "./auth/Auth";
 import { ModalContext } from "./modals/ModalProvider";
 import MessageBox from "./modals/MessageBox";
@@ -8,12 +8,21 @@ import AddOrEditItem from "./AddOrEditItem";
 import { truncateText } from "./utilities/stringOperations";
 import { ADD_ITEM_ID } from "./utilities/itemCardUtilities";
 
-const getToolTipText = (itemID, title, description) => {
+const getToolTipText = (itemID: number, title: string, description: string) => {
   if (itemID === ADD_ITEM_ID) return "Add New Item";
   return title + ": " + description;
 };
 
 const TITLE_MAX_NUM_CHARS = 54;
+
+export interface ItemCardProps {
+  itemId: number,
+  itemImage: string,
+  itemTitle: string,
+  itemDescription: string,
+  reloadItems: () => void,
+  onDelete: () => void
+}
 
 function ItemCard({
   itemId,
@@ -22,7 +31,7 @@ function ItemCard({
   itemDescription,
   reloadItems = () => {},
   onDelete,
-}) {
+}: ItemCardProps) {
   /*
     A component to show a preview of the full item.
   */
@@ -102,13 +111,13 @@ function ItemCard({
   ]);
 
   // This would be a good place for useCallback if performance issues arise.
-  const handleAddOrEditClicked = (e) => {
+  const handleAddOrEditClicked: MouseEventHandler = (e) => {
     e.preventDefault();
     setIsEditing(true);
   };
 
   // This would be a good place for useCallback if performance issues arise.
-  const handleRemoveItemClicked = (e) => {
+  const handleRemoveItemClicked: MouseEventHandler = (e) => {
     e.preventDefault();
     showModal(
       <MessageBox
@@ -136,7 +145,7 @@ function ItemCard({
   // logic were abstracted into a separate hook.
   const linkDestination =
     itemId > 0 ? `/item/${itemId}` : location.pathname + location.search;
-  const onLinkClick = itemId === ADD_ITEM_ID ? handleAddOrEditClicked : null;
+  const onLinkClick : MouseEventHandler = itemId === ADD_ITEM_ID ? handleAddOrEditClicked : () => {};
 
   return (
     <Link

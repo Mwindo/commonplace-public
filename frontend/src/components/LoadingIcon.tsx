@@ -1,6 +1,6 @@
 import classes from "./LoadingIcon.module.css";
 
-function LoadingIcon({ size = "80px" }: { size: string }) {
+function LoadingIcon({ size = "80px" }: { size?: string }) {
   return (
     <div className={classes.loading_wrapper}>
       <div style={{ width: size, height: size }}>
