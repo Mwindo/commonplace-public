@@ -77,7 +77,7 @@ function ItemDetailsPage({ previewData } : { previewData?: any}) {
         <LoadingIcon />
       ) : (
         <>
-          <h1 role="heading" className={classes.title}>
+          <h1 className={classes.title}>
             {itemDetailsData["data"]["title"]}
           </h1>
           <div

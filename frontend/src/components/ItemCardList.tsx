@@ -43,6 +43,7 @@ function ItemCardList({
     searchParams.delete("page");
     setSearchParams(searchParams);
     setPage(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /*
@@ -52,7 +53,7 @@ function ItemCardList({
     if (!pageURLParam) {
       setPage(0);
     }
-  }, [pageURLParam]);
+  }, [pageURLParam, setPage]);
 
   const numPages = Math.ceil(children.length / MAX_PAGE_SIZE);
 
