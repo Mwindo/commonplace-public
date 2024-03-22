@@ -24,7 +24,7 @@ const itemDetailsQuery = gql`
   }
 `;
 
-function ItemDetailsPage({ previewData }) {
+function ItemDetailsPage({ previewData } : { previewData?: any}) {
   /*
     This page displays an item in its full form, i.e., with the content.
     In other words, this is a commonplace article.
@@ -42,7 +42,7 @@ function ItemDetailsPage({ previewData }) {
       return previewData;
     }
     const data = await gqlFetch(itemDetailsQuery, {
-      ids: [parseInt(itemId)],
+      ids: [parseInt(itemId!)],
     });
     return data["item_list"]["items"][0];
   };
@@ -77,7 +77,7 @@ function ItemDetailsPage({ previewData }) {
         <LoadingIcon />
       ) : (
         <>
-          <h1 role="heading" className={classes.title}>
+          <h1 className={classes.title}>
             {itemDetailsData["data"]["title"]}
           </h1>
           <div

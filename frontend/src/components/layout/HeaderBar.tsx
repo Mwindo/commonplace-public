@@ -37,7 +37,7 @@ function HeaderBar() {
             onKeyDown={(e) => {
               if ((e.key = "Enter")) logout();
             }}
-            tabIndex="0" // Allow this to be focusable
+            tabIndex={0} // Allow this to be focusable
           />
         )}
       </div>

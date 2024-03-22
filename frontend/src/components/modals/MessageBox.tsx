@@ -1,12 +1,20 @@
 import classes from "./MessageBox.module.css";
 
+interface MessageBoxProps {
+  message: string;
+  onConfirm?: (() => any) | null;
+  onCancel?: (() => any) | null;
+  onConfirmText?: string;
+  onCancelText?: string;
+}
+
 function MessageBox({
   message,
-  onConfirm,
-  onCancel,
+  onConfirm = null,
+  onCancel = null,
   onConfirmText = "Confirm",
   onCancelText = "Cancel",
-}) {
+}: MessageBoxProps) {
   return (
     <>
       <div className={classes.message_box_message}>{message}</div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import classes from "./ItemCardList.module.css";
 import { useSearchParams } from "react-router-dom";
 import { itemCardIsAddItem } from "./utilities/itemCardUtilities";
@@ -6,12 +6,19 @@ import { itemCardIsAddItem } from "./utilities/itemCardUtilities";
 // If the data set gets large, consider server-side pagination.
 export const MAX_PAGE_SIZE = 12; // Divisible by 4, 3, 2, 1, which looks good on most screens
 
+interface ItemCardListProps {
+  children: ReactNode[];
+  showCount: boolean;
+  pageIncrementText: string;
+  pageDecrementText: string;
+}
+
 function ItemCardList({
   children,
   showCount,
   pageIncrementText,
   pageDecrementText,
-}) {
+}: ItemCardListProps) {
   /*
     Display the ItemCards, paginated.
 
@@ -21,7 +28,7 @@ function ItemCardList({
 
   // First, get the pagination query param.
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageURLParam = parseInt(searchParams.get("page")) || 0;
+  const pageURLParam = parseInt(searchParams.get("page") || "0");
 
   // Set the state to match the pagination query param.
   const [page, setPage] = useState(pageURLParam);
@@ -33,9 +40,10 @@ function ItemCardList({
     but if that happens, this will need to be more granular.
   */
   useEffect(() => {
-      searchParams.delete("page");
-      setSearchParams(searchParams);
-      setPage(0);
+    searchParams.delete("page");
+    setSearchParams(searchParams);
+    setPage(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /*
@@ -45,11 +53,11 @@ function ItemCardList({
     if (!pageURLParam) {
       setPage(0);
     }
-}, [pageURLParam]);
+  }, [pageURLParam, setPage]);
 
   const numPages = Math.ceil(children.length / MAX_PAGE_SIZE);
 
-  const getPageData = (page) => {
+  const getPageData = (page: number) => {
     return children.slice(
       page * MAX_PAGE_SIZE,
       page * MAX_PAGE_SIZE + MAX_PAGE_SIZE
@@ -58,9 +66,9 @@ function ItemCardList({
 
   // Whenever we setPage, we should also update the pagination query param.
   // Call this to do so.
-  const setPageAndURLParam = (page) => {
+  const setPageAndURLParam = (page: number) => {
     setPage(page);
-    searchParams.set("page", page);
+    searchParams.set("page", page.toString());
     setSearchParams(searchParams);
   };
 
@@ -72,7 +80,9 @@ function ItemCardList({
           " results"
         : null}
       {/* Show the Item Card associated with the selected page. */}
-      <div role="list" className={classes.item_list}>{getPageData(page)}</div>
+      <div role="list" className={classes.item_list}>
+        {getPageData(page)}
+      </div>
       {/* Include a simple pagination bar. */}
       <div className={classes.simple_pagination_bar}>
         {page > 0 && (

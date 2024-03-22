@@ -1,7 +1,6 @@
 import { useLocation, Navigate } from "react-router-dom";
 
 function LoggedOutPage() {
-
   const { state } = useLocation();
 
   // Only allow the app to route to this page

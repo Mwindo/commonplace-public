@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { FormEventHandler, MouseEventHandler, useContext, useEffect } from "react";
 import classes from "./AddOrEditItem.module.css";
 import { gql } from "graphql-request";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -49,18 +49,18 @@ const addOrEditItemMutation = gql`
 `;
 
 // TODO: Obviously janky. Instead, we should use a dropdown component to select existing tags or add new ones.
-const splitTagString = (tagString) => {
+const splitTagString = (tagString: string) => {
   if (!tagString) return tagString;
   return tagString.toString().split(",");
 };
 
-function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
+function AddOrEditItem({ itemId, setDirty = () => {}, onSave } : {itemId: number, setDirty: (dirty: boolean) => void, onSave: () => void}) {
   const { showErrorMessage, closeAllModals } = useContext(ModalContext);
 
   // We keep track of the original input values and the current input values
   // to check if the form is dirty.
-  const [originalInputValues, setOriginalInputValues] = useState({});
-  const [inputValues, setInputValues] = useState({});
+  const [originalInputValues, setOriginalInputValues] = useState<any>({});
+  const [inputValues, setInputValues] = useState<any>({});
   setDirty = setDirty || (() => {});
 
   const { gqlFetch } = useContext(GQLQueryContext);
@@ -89,13 +89,12 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
   const addOrEditItemFieldsData = useQuery({
     queryKey: ["itemFields"],
     queryFn: fetchAddOrEditItemFields,
-    onError: showErrorMessage,
   });
 
   // The request for getting any existing data that goes into the fields the user needs to enter.
   const fetchExistingItemData = async () => {
     const data = await gqlFetch(existingItemDataQuery, {
-      ids: [parseInt(itemId)],
+      ids: [itemId],
     });
     setOriginalInputValues(data["item_list"]["items"][0]);
     setInputValues(data["item_list"]["items"][0]);
@@ -110,7 +109,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
   });
 
   // The request for updating the item with what the user has entered.
-  const sendAddOrEditRequest = async (data) => {
+  const sendAddOrEditRequest = async (data: any) => {
     return await gqlFetch(addOrEditItemMutation, data);
   };
 
@@ -121,7 +120,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
   });
 
   // The function to run when the add or edit form is submitted.
-  const handleSubmitAddOrEdit = (e) => {
+  const handleSubmitAddOrEdit : FormEventHandler = (e) => {
     e.preventDefault();
     addOrEditItem.mutate({
       input: { id: itemId, ...inputValues },
@@ -129,11 +128,11 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
   };
 
   // This would be a good place for useCallback if performance issues arise.
-  const updateInputValue = (fieldName, value) => {
+  const updateInputValue = (fieldName: string, value: any) => {
     if (fieldName === "tags") {
       value = splitTagString(value);
     }
-    setInputValues((prev) => ({ ...prev, [fieldName]: value }));
+    setInputValues((prev: any) => ({ ...prev, [fieldName]: value }));
   };
 
   // We automatically add the currently selected tag to the form
@@ -143,7 +142,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
     updateInputValue("tags", [tagsearch]);
   }, [tagsearch]);
 
-  const handlePreviewClicked = (e) => {
+  const handlePreviewClicked : MouseEventHandler = (e) => {
     // We will save the preview data to storage and load it in a new window
     e.preventDefault();
     setItemCardPreviewData(JSON.stringify(inputValues));
@@ -168,7 +167,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
   // If we are not loading, show the form.
   return (
     <div className={classes.add_or_edit_item_container}>
-      <h2 role="heading">
+      <h2>
         {itemId !== ADD_ITEM_ID ? "Editing Item" : "Adding Item"}
       </h2>
       <form onSubmit={handleSubmitAddOrEdit}>
@@ -177,7 +176,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
           disabled={addOrEditItem.isPending}
         >
           {!addOrEditItemFieldsData.isLoading &&
-            addOrEditItemFieldsData["data"].map((field) => {
+            addOrEditItemFieldsData["data"].map((field: any) => {
               return (
                 // Render the right input type, with a label, for each field the user can modify.
                 <span
@@ -220,7 +219,6 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave }) {
             <button type="submit" className={classes.save_button}>
               {addOrEditItem.isPending ? (
                 <LoadingIcon
-                  className={classes.save_button_loading}
                   size={"2.2em"}
                 />
               ) : (

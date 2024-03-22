@@ -5,16 +5,15 @@ const endpoint = isProductionEnvironment()
   ? "https://commonplace.enigmatographer.com/graphql"
   : "http://dev.commonplace.com:5000/graphql";
 
-function getCookie(name) {
+function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
+  if (parts.length === 2) return parts?.pop()?.split(";").shift();
 }
 
 export const getGQLQueryClient = () => {
   return new GraphQLClient(endpoint, {
     credentials: "include",
-    withCredentials: true,
     mode: "cors",
     headers: {
       "Content-Type": "application/json",

@@ -1,14 +1,19 @@
-import { createContext, useContext } from "react";
+import { ReactNode, createContext, useContext } from "react";
 import { getGQLQueryClient } from "./gqlQueryClient";
 import { LoginContext } from "../auth/Auth";
 
-export const GQLQueryContext = createContext();
+interface GQLQueryContextProps {
+  gqlFetch: (query: string, variables?: any) => any;
+  showSessionExpired: () => void;
+}
+
+export const GQLQueryContext = createContext({} as GQLQueryContextProps);
 
 // To avoid recreating the same query client across the app.
-const GQLQueryProvider = ({ children }) => {
+const GQLQueryProvider = ({ children }: { children: ReactNode }) => {
   const { showSessionExpired } = useContext(LoginContext);
 
-  const gqlFetch = async (query, variables) => {
+  const gqlFetch = async (query: string, variables?: any) => {
     try {
       const response = await getGQLQueryClient().request(query, variables);
       return response;

@@ -1,15 +1,25 @@
-import { useContext, useEffect } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import classes from "./ModalWrapper.module.css";
 import { ModalContext } from "./ModalProvider";
 
-function ModalWrapper({ onCancel, children, showCloseButton }) {
+interface ModalWrapperProps {
+  onCancel?: () => any;
+  children?: ReactNode;
+  showCloseButton: boolean;
+}
+
+function ModalWrapper({
+  onCancel,
+  children,
+  showCloseButton,
+}: ModalWrapperProps) {
   const { closeModal } = useContext(ModalContext);
 
   onCancel = onCancel || closeModal;
 
   // Add key handlers for better accessibility
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onCancel ? onCancel() : closeModal();
       }
