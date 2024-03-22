@@ -4,9 +4,23 @@ import diceIcon from "../images/dice-icon.svg";
 import { useNavigate } from "react-router-dom";
 import { itemCardIsAddItem } from "./utilities/itemCardUtilities";
 
-const canRandomize = (items) => {
-  return items.filter((item) => !itemCardIsAddItem(item)).length > 1;
+const canRandomize = (items: any) => {
+  return items.filter((item: any) => !itemCardIsAddItem(item)).length > 1;
 };
+
+interface TagOption {
+  value: string;
+  label: string;
+}
+
+interface SearchBarProps {
+  currentItems: any[]; // TODO: Fix
+  onSearch: (searchTerm: string) => void;
+  searchTerm: string;
+  selectedTag: string;
+  tagOptions: TagOption[];
+  onSelectTag: (tagValue: string) => void;
+}
 
 function SearchBar({
   currentItems,
@@ -15,7 +29,7 @@ function SearchBar({
   selectedTag,
   tagOptions,
   onSelectTag,
-}) {
+} : SearchBarProps) {
   const navigate = useNavigate();
 
   // This would be a good place for useCallback if performance issues arise.
@@ -37,7 +51,7 @@ function SearchBar({
           id="search"
           name="search"
           onKeyUp={(e) => {
-            if (e.key === "Enter") onSearch(e.target.value);
+            if (e.key === "Enter") onSearch((e.target as HTMLInputElement).value);
           }}
           onBlur={(e) => onSearch(e.target.value)}
           defaultValue={searchTerm}
@@ -67,7 +81,13 @@ function SearchBar({
               cursor: "pointer",
             }),
           }}
-          onChange={(e) => onSelectTag(e ? e["value"] : "")}
+          onChange={(e) => {
+            if (typeof e === 'object' && e !== null && 'value' in e) {
+              onSelectTag(e.value);
+            } else {
+              onSelectTag("");
+            }
+          }}
           isClearable={true}
           placeholder="Filter by tag"
           options={tagOptions}
@@ -85,7 +105,7 @@ function SearchBar({
           onKeyDown={(e) => {
             if ((e.key = "Enter")) onGetRandomClicked();
           }}
-          tabIndex="0" // Allow this to be focusable
+          tabIndex={0} // Allow this to be focusable
         />
       </div>
     </div>

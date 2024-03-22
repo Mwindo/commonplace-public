@@ -1,16 +1,16 @@
 import { Route, Routes, useLocation } from "react-router-dom";
-import ScrollToTop from "./ScrollToTop";
+import ScrollToTop from "./ScrollToTop.js";
 
-import ItemSearchPage from "../../pages/ItemSearch";
-import AboutPage from "../../pages/About";
-import ItemDetailsPage from "../../pages/ItemDetails";
-import LoginPage from "../../pages/Login";
-import NotFoundPage from "../../pages/NotFound";
-import NetworkErrorPage from "../../pages/NetworkError";
+import ItemSearchPage from "../../pages/ItemSearch.js";
+import AboutPage from "../../pages/About.tsx";
+import ItemDetailsPage from "../../pages/ItemDetails.js";
+import LoginPage from "../../pages/Login.js";
+import NotFoundPage from "../../pages/NotFound.js";
+import NetworkErrorPage from "../../pages/NetworkError.js";
 
 import { AnimatePresence } from "framer-motion";
-import LoggOutPage from "../../pages/LoggedOut";
-import PreviewItemPage from "../../pages/PreviewItemDetails";
+import LoggOutPage from "../../pages/LoggedOut.js";
+import PreviewItemPage from "../../pages/PreviewItemDetails.js";
 
 function AnimatedRoutes() {
   const location = useLocation();

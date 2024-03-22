@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 import { gql } from "graphql-request";
 import { useQuery } from "@tanstack/react-query";
 import { getGQLQueryClient } from "../requests/gqlQueryClient";
@@ -6,7 +6,37 @@ import { ModalContext } from "../modals/ModalProvider";
 import MessageBox from "../modals/MessageBox";
 import { useNavigate } from "react-router-dom";
 
-export const LoginContext = createContext();
+interface LoginContextProps {
+  isAuth: boolean;
+  setAuth: (auth: boolean) => void;
+  login: ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => any;
+  logout: () => any;
+  showSessionExpired: () => void;
+}
+
+interface LoginResponse {
+  login: {
+    status: string;
+    error: string;
+    id: number;
+  };
+}
+
+interface LogoutResponse {
+  logout: boolean;
+}
+
+interface IsLoggedInResponse {
+  is_logged_in: boolean;
+}
+
+export const LoginContext = createContext({} as LoginContextProps);
 
 const IS_AUTH_CHECK_INTERVAL = 60000; // TODO: make more dynamic as needed
 
@@ -32,16 +62,25 @@ const loggedInQuery = gql`
   }
 `;
 
-const LoginProvider = ({ children }) => {
+const LoginProvider = ({ children }: { children: ReactNode }) => {
   const [isAuth, setAuth] = useState(document.cookie ? true : false);
 
   const { showAlertDialogue, closeAllModals } = useContext(ModalContext);
 
-  const login = async ({ username, password }) => {
-    const response = await getGQLQueryClient().request(loginMutationQuery, {
-      username: username,
-      password: password,
-    });
+  const login = async ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => {
+    const response: LoginResponse = await getGQLQueryClient().request(
+      loginMutationQuery,
+      {
+        username: username,
+        password: password,
+      }
+    );
     // TODO: Better error handling
     if (response["login"]["status"] === "true") {
       setAuth(true);
@@ -57,7 +96,9 @@ const LoginProvider = ({ children }) => {
     if (!isAuth) {
       return;
     }
-    const response = await getGQLQueryClient().request(logoutMutationQuery);
+    const response: LogoutResponse = await getGQLQueryClient().request(
+      logoutMutationQuery
+    );
     if (response["logout"] === true) {
       setAuth(false);
     }
@@ -81,7 +122,9 @@ const LoginProvider = ({ children }) => {
   };
 
   const checkLoggedIn = async () => {
-    const response = await getGQLQueryClient().request(loggedInQuery);
+    const response: IsLoggedInResponse = await getGQLQueryClient().request(
+      loggedInQuery
+    );
     if (isAuth && response["is_logged_in"] === false) {
       showSessionExpired();
     }

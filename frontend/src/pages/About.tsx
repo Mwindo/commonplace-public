@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import classes from "./About.module.css";
+import styles from "./About.module.css";
 import textStyles from "../styling/TextStyles.module.css";
 
 function AboutPage() {
@@ -13,9 +13,9 @@ function AboutPage() {
         transition: { duration: 0.1 },
       }}
     >
-      <div className={classes.title}>About</div>
-      <div className={classes.text_body}>
-        <div className={classes.quotation}>
+      <div className={styles.title}>About</div>
+      <div className={styles.text_body}>
+        <div className={styles.quotation}>
           It is a wholesome plan, in thinking about logic, to stock the mind
           with as many puzzles as possible.
           <br />

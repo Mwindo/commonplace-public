@@ -1,18 +1,29 @@
-import { createContext, useCallback, useState } from "react";
+import { ReactNode, createContext, useCallback, useState } from "react";
 import ModalWrapper from "./ModalWrapper";
 import AlertDialogueWrapper from "./AlertDialogueWrapper";
 import MessageBox from "./MessageBox";
 
-export const ModalContext = createContext();
+interface ModalContextProps {
+  modal: any,
+  showModal: any,
+  closeModal: any,
+  alertDialogue: any,
+  showAlertDialogue: any,
+  closeAlertDialogue: any,
+  closeAllModals: any,
+  showErrorMessage: any
+}
+
+export const ModalContext = createContext<ModalContextProps>({} as ModalContextProps);
 
 // TODO: Make more flexible as needed.
 // E.g., rather than storing component directly, store state and rerender accordingly.
-const ModalProvider = ({ children }) => {
-  const [modal, setModal] = useState(null);
-  const [alertDialogue, setAlertDialogue] = useState(null);
+const ModalProvider = ({ children }: {children: ReactNode}) => {
+  const [modal, setModal] = useState<ReactNode | null>(null);
+  const [alertDialogue, setAlertDialogue] = useState<ReactNode | null>(null);
 
   const showModal = useCallback(
-    (modal, onCancel = null, showCloseButton = false) => {
+    (modal: ReactNode, onCancel = undefined, showCloseButton = false) => {
       setModal(
         <ModalWrapper onCancel={onCancel} showCloseButton={showCloseButton}>
           {modal}
@@ -23,7 +34,7 @@ const ModalProvider = ({ children }) => {
   );
 
   const showAlertDialogue = useCallback(
-    (dialogueComponent) => {
+    (dialogueComponent: ReactNode) => {
       setAlertDialogue(
         <AlertDialogueWrapper>{dialogueComponent}</AlertDialogueWrapper>
       );
