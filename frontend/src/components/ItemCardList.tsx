@@ -1,20 +1,26 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import classes from "./ItemCardList.module.css";
 import { useSearchParams } from "react-router-dom";
-import { itemCardIsAddItem } from "./utilities/itemCardUtilities";
+import { itemIsAddItem } from "./utilities/itemCardUtilities";
+import { ItemData } from "../pages/ItemDetails";
+import ItemCard from "./ItemCard";
 
 // If the data set gets large, consider server-side pagination.
 export const MAX_PAGE_SIZE = 12; // Divisible by 4, 3, 2, 1, which looks good on most screens
 
 interface ItemCardListProps {
-  children: ReactNode[];
+  items: ItemData[];
+  onDelete: (id: number) => void;
+  reloadItems: () => void;
   showCount: boolean;
   pageIncrementText: string;
   pageDecrementText: string;
 }
 
 function ItemCardList({
-  children,
+  items,
+  onDelete,
+  reloadItems,
   showCount,
   pageIncrementText,
   pageDecrementText,
@@ -55,13 +61,22 @@ function ItemCardList({
     }
   }, [pageURLParam, setPage]);
 
-  const numPages = Math.ceil(children.length / MAX_PAGE_SIZE);
+  const numPages = Math.ceil(items.length / MAX_PAGE_SIZE);
 
   const getPageData = (page: number) => {
-    return children.slice(
-      page * MAX_PAGE_SIZE,
-      page * MAX_PAGE_SIZE + MAX_PAGE_SIZE
-    );
+    return items
+      .slice(page * MAX_PAGE_SIZE, page * MAX_PAGE_SIZE + MAX_PAGE_SIZE)
+      .map((item: ItemData) => (
+        <ItemCard
+          key={item.id}
+          itemId={item.id!}
+          itemImage={item["thumbnail_url"] || item["image_url"]}
+          itemTitle={item["title"]}
+          itemDescription={item["description"]}
+          reloadItems={reloadItems}
+          onDelete={() => onDelete(item.id)}
+        />
+      ));
   };
 
   // Whenever we setPage, we should also update the pagination query param.
@@ -76,8 +91,7 @@ function ItemCardList({
     <>
       {/* Filter out the Add Item Card, if present. */}
       {showCount
-        ? children.filter((itemCard) => !itemCardIsAddItem(itemCard)).length +
-          " results"
+        ? items.filter((item) => !itemIsAddItem(item)).length + " results"
         : null}
       {/* Show the Item Card associated with the selected page. */}
       <div role="list" className={classes.item_list}>

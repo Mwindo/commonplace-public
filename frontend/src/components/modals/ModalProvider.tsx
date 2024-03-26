@@ -4,26 +4,36 @@ import AlertDialogueWrapper from "./AlertDialogueWrapper";
 import MessageBox from "./MessageBox";
 
 interface ModalContextProps {
-  modal: any,
-  showModal: any,
-  closeModal: any,
-  alertDialogue: any,
-  showAlertDialogue: any,
-  closeAlertDialogue: any,
-  closeAllModals: any,
-  showErrorMessage: any
+  modal?: ReactNode;
+  showModal: (
+    modal: ReactNode,
+    onCancel?: (() => void) | undefined,
+    showCloseButton?: boolean
+  ) => void;
+  closeModal: () => void;
+  alertDialogue?: ReactNode;
+  showAlertDialogue: (dialogueComponent: ReactNode) => void;
+  closeAlertDialogue: () => void;
+  closeAllModals: () => void;
+  showErrorMessage: (message: string) => void;
 }
 
-export const ModalContext = createContext<ModalContextProps>({} as ModalContextProps);
+export const ModalContext = createContext<ModalContextProps>(
+  {} as ModalContextProps
+);
 
 // TODO: Make more flexible as needed.
 // E.g., rather than storing component directly, store state and rerender accordingly.
-const ModalProvider = ({ children }: {children: ReactNode}) => {
+const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [modal, setModal] = useState<ReactNode | null>(null);
   const [alertDialogue, setAlertDialogue] = useState<ReactNode | null>(null);
 
   const showModal = useCallback(
-    (modal: ReactNode, onCancel = undefined, showCloseButton = false) => {
+    (
+      modal: ReactNode,
+      onCancel: (() => void) | undefined = undefined,
+      showCloseButton: boolean = false
+    ) => {
       setModal(
         <ModalWrapper onCancel={onCancel} showCloseButton={showCloseButton}>
           {modal}

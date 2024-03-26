@@ -1,4 +1,9 @@
-import { FormEventHandler, MouseEventHandler, useContext, useEffect } from "react";
+import {
+  FormEventHandler,
+  MouseEventHandler,
+  useContext,
+  useEffect,
+} from "react";
 import classes from "./AddOrEditItem.module.css";
 import { gql } from "graphql-request";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -9,9 +14,20 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import { ADD_ITEM_ID } from "./utilities/itemCardUtilities";
 import { GQLQueryContext } from "./requests/GQLQueryProvider";
 import { setItemCardPreviewData } from "./utilities/itemCardPreview";
+import { ItemData } from "../pages/ItemDetails";
 
 // TODO: Consider using React Hook Form (or Formik, although I haven't loved it in the past) and yup.
 
+// The shape of each individaul field.
+interface Field {
+  field_name: keyof ItemData;
+  display_name: string;
+  type: string;
+  required: boolean;
+}
+
+// The query to retrieve data already associated with an object.
+// TODO: better to use a fragment since this is also used for ItemSearch.
 const existingItemDataQuery = gql`
   query itemDetails($ids: [Int]) {
     item_list(ids: $ids) {
@@ -28,7 +44,10 @@ const existingItemDataQuery = gql`
   }
 `;
 
-// To get the fields the user needs to fill in.
+// The query to retrieve information on the fields the user needs to fill in.
+/* TODO: Right now we dynamically get the fields ... but we have them more
+or less hardcoded in our existingItemDataQuery. It would be best to link the
+two, which would make things more dynamic and save a network trip. */
 const addOrEditItemFieldsQuery = gql`
   query getFields {
     add_or_edit_item_fields {
@@ -49,19 +68,28 @@ const addOrEditItemMutation = gql`
 `;
 
 // TODO: Obviously janky. Instead, we should use a dropdown component to select existing tags or add new ones.
-const splitTagString = (tagString: string) => {
-  if (!tagString) return tagString;
+const splitTagString = (tagString: string): string[] => {
+  if (!tagString) return [tagString];
   return tagString.toString().split(",");
 };
 
-function AddOrEditItem({ itemId, setDirty = () => {}, onSave } : {itemId: number, setDirty: (dirty: boolean) => void, onSave: () => void}) {
+function AddOrEditItem({
+  itemId,
+  setDirty = () => {},
+  onSave,
+}: {
+  itemId: number;
+  setDirty: (dirty: boolean) => void;
+  onSave: () => void;
+}) {
   const { showErrorMessage, closeAllModals } = useContext(ModalContext);
 
   // We keep track of the original input values and the current input values
   // to check if the form is dirty.
-  const [originalInputValues, setOriginalInputValues] = useState<any>({});
-  const [inputValues, setInputValues] = useState<any>({});
-  setDirty = setDirty || (() => {});
+  const [inputValues, setInputValues] = useState<Partial<ItemData>>({});
+  const [originalInputValues, setOriginalInputValues] = useState<
+    Partial<ItemData>
+  >({});
 
   const { gqlFetch } = useContext(GQLQueryContext);
 
@@ -69,21 +97,18 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave } : {itemId: number
   useEffect(() => {
     // This is a place where a third-party library would be better
     const updateFormIsDirty = () => {
-      for (const i in inputValues) {
-        if (inputValues[i] !== originalInputValues[i]) {
-          setDirty(true);
-          return;
-        }
-      }
-      setDirty(false);
+      const dirty =
+        JSON.stringify(inputValues) !== JSON.stringify(originalInputValues);
+      setDirty(dirty);
     };
     updateFormIsDirty();
   }, [inputValues, originalInputValues, setDirty]);
 
   // The request for getting the fields the user needs to enter.
-  const fetchAddOrEditItemFields = async () => {
+  const fetchAddOrEditItemFields = async (): Promise<Field[]> => {
     const data = await gqlFetch(addOrEditItemFieldsQuery);
-    return data["add_or_edit_item_fields"];
+    if (!data) return [];
+    return (data["add_or_edit_item_fields"] || []) as Field[];
   };
 
   const addOrEditItemFieldsData = useQuery({
@@ -92,13 +117,13 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave } : {itemId: number
   });
 
   // The request for getting any existing data that goes into the fields the user needs to enter.
-  const fetchExistingItemData = async () => {
+  const fetchExistingItemData = async (): Promise<ItemData> => {
     const data = await gqlFetch(existingItemDataQuery, {
       ids: [itemId],
     });
     setOriginalInputValues(data["item_list"]["items"][0]);
     setInputValues(data["item_list"]["items"][0]);
-    return data["item_list"]["items"][0];
+    return data["item_list"]["items"][0] as ItemData;
   };
 
   const existingItemData = useQuery({
@@ -109,7 +134,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave } : {itemId: number
   });
 
   // The request for updating the item with what the user has entered.
-  const sendAddOrEditRequest = async (data: any) => {
+  const sendAddOrEditRequest = async (data: ItemData) => {
     return await gqlFetch(addOrEditItemMutation, data);
   };
 
@@ -120,29 +145,32 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave } : {itemId: number
   });
 
   // The function to run when the add or edit form is submitted.
-  const handleSubmitAddOrEdit : FormEventHandler = (e) => {
+  const handleSubmitAddOrEdit: FormEventHandler = (e) => {
     e.preventDefault();
-    addOrEditItem.mutate({
-      input: { id: itemId, ...inputValues },
-    });
+    addOrEditItem.mutate({ id: itemId, ...inputValues } as ItemData);
   };
 
   // This would be a good place for useCallback if performance issues arise.
-  const updateInputValue = (fieldName: string, value: any) => {
-    if (fieldName === "tags") {
-      value = splitTagString(value);
+  const updateInputValue = <K extends keyof ItemData>(
+    fieldName: K,
+    value: ItemData[K]
+  ) => {
+    let newValue: ItemData[K] | string | string[] = value;
+    if (fieldName === "tags" && typeof value === "string") {
+      // Assuming splitTagString(value) correctly returns string[]
+      newValue = splitTagString(value) as ItemData[K];
     }
-    setInputValues((prev: any) => ({ ...prev, [fieldName]: value }));
+    setInputValues((prev) => ({ ...prev, [fieldName]: newValue }));
   };
 
   // We automatically add the currently selected tag to the form
   const [searchParams] = useSearchParams();
   const tagsearch = searchParams.get("tagsearch") || null;
   useEffect(() => {
-    updateInputValue("tags", [tagsearch]);
+    updateInputValue("tags", [tagsearch || ""]);
   }, [tagsearch]);
 
-  const handlePreviewClicked : MouseEventHandler = (e) => {
+  const handlePreviewClicked: MouseEventHandler = (e) => {
     // We will save the preview data to storage and load it in a new window
     e.preventDefault();
     setItemCardPreviewData(JSON.stringify(inputValues));
@@ -167,48 +195,41 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave } : {itemId: number
   // If we are not loading, show the form.
   return (
     <div className={classes.add_or_edit_item_container}>
-      <h2>
-        {itemId !== ADD_ITEM_ID ? "Editing Item" : "Adding Item"}
-      </h2>
+      <h2>{itemId !== ADD_ITEM_ID ? "Editing Item" : "Adding Item"}</h2>
       <form onSubmit={handleSubmitAddOrEdit}>
         <fieldset
           className={classes.fieldset}
           disabled={addOrEditItem.isPending}
         >
           {!addOrEditItemFieldsData.isLoading &&
-            addOrEditItemFieldsData["data"].map((field: any) => {
+            addOrEditItemFieldsData.data?.map((field: Field) => {
               return (
                 // Render the right input type, with a label, for each field the user can modify.
-                <span
-                  className={classes.span}
-                  key={`${field["field_name"]}-span`}
-                >
-                  <label htmlFor={field["field_name"]}>
-                    {field["display_name"]}
-                  </label>
-                  {field["type"] === "text" && (
+                <span className={classes.span} key={`${field.field_name}-span`}>
+                  <label htmlFor={field.field_name}>{field.display_name}</label>
+                  {field.type === "text" && (
                     <input
                       className={classes.border_box}
                       onChange={(e) =>
-                        updateInputValue(field["field_name"], e.target.value)
+                        updateInputValue(field.field_name, e.target.value)
                       }
                       type="text"
-                      name={field["field_name"]}
-                      id={field["field_name"]}
-                      required={field["required"]}
-                      defaultValue={inputValues[field["field_name"]]}
+                      name={field.field_name}
+                      id={field.field_name}
+                      required={field.required}
+                      defaultValue={inputValues[field.field_name]}
                     />
                   )}
                   {field["type"] === "textarea" && (
                     <textarea
                       onChange={(e) =>
-                        updateInputValue(field["field_name"], e.target.value)
+                        updateInputValue(field.field_name, e.target.value)
                       }
                       rows={20}
-                      name={field["field_name"]}
-                      id={field["field_name"]}
-                      required={field["required"]}
-                      defaultValue={inputValues[field["field_name"]]}
+                      name={field.field_name}
+                      id={field.field_name}
+                      required={field.required}
+                      defaultValue={inputValues[field.field_name]}
                     />
                   )}
                 </span>
@@ -218,9 +239,7 @@ function AddOrEditItem({ itemId, setDirty = () => {}, onSave } : {itemId: number
           <div className={classes.save_container}>
             <button type="submit" className={classes.save_button}>
               {addOrEditItem.isPending ? (
-                <LoadingIcon
-                  size={"2.2em"}
-                />
+                <LoadingIcon size={"2.2em"} />
               ) : (
                 "Save"
               )}

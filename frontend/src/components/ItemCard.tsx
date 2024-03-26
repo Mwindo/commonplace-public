@@ -16,12 +16,12 @@ const getToolTipText = (itemID: number, title: string, description: string) => {
 const TITLE_MAX_NUM_CHARS = 54;
 
 export interface ItemCardProps {
-  itemId: number,
-  itemImage: string,
-  itemTitle: string,
-  itemDescription: string,
-  reloadItems: () => void,
-  onDelete: () => void
+  itemId: number;
+  itemImage: string;
+  itemTitle: string;
+  itemDescription: string;
+  reloadItems: () => void;
+  onDelete: () => void;
 }
 
 function ItemCard({
@@ -145,7 +145,8 @@ function ItemCard({
   // logic were abstracted into a separate hook.
   const linkDestination =
     itemId > 0 ? `/item/${itemId}` : location.pathname + location.search;
-  const onLinkClick : MouseEventHandler = itemId === ADD_ITEM_ID ? handleAddOrEditClicked : () => {};
+  const onLinkClick: MouseEventHandler =
+    itemId === ADD_ITEM_ID ? handleAddOrEditClicked : () => {};
 
   return (
     <Link
