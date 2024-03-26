@@ -10,6 +10,18 @@ import { useContext } from "react";
 import { GQLQueryContext } from "../components/requests/GQLQueryProvider";
 import textStyles from "../styling/TextStyles.module.css";
 
+// The shape of the form data we expect.
+export interface ItemData {
+  id: number;
+  title: string;
+  description: string;
+  image_url: string;
+  thumbnail_url?: string;
+  external_url?: string;
+  content: string;
+  tags?: string[];
+}
+
 const itemDetailsQuery = gql`
   query itemDetails($ids: [Int]) {
     item_list(ids: $ids) {
@@ -24,7 +36,7 @@ const itemDetailsQuery = gql`
   }
 `;
 
-function ItemDetailsPage({ previewData } : { previewData?: any}) {
+function ItemDetailsPage({ previewData }: { previewData?: ItemData }) {
   /*
     This page displays an item in its full form, i.e., with the content.
     In other words, this is a commonplace article.
@@ -37,7 +49,7 @@ function ItemDetailsPage({ previewData } : { previewData?: any}) {
   const { gqlFetch } = useContext(GQLQueryContext);
 
   // The function for getting the details from the backend
-  const fetchItemData = async () => {
+  const fetchItemData = async (): Promise<ItemData> => {
     if (previewData) {
       return previewData;
     }
@@ -77,18 +89,16 @@ function ItemDetailsPage({ previewData } : { previewData?: any}) {
         <LoadingIcon />
       ) : (
         <>
-          <h1 className={classes.title}>
-            {itemDetailsData["data"]["title"]}
-          </h1>
+          <h1 className={classes.title}>{itemDetailsData.data?.title}</h1>
           <div
             className={classes.image}
             style={{
-              backgroundImage: `url(${itemDetailsData["data"]["image_url"]})`,
+              backgroundImage: `url(${itemDetailsData.data?.image_url})`,
             }}
           />
-          <TagBox tags={itemDetailsData["data"]["tags"]} />
+          <TagBox tags={itemDetailsData.data?.tags || []} />
           <main role="main" className={textStyles.text_body}>
-            {MakeSplitStringComponent(itemDetailsData["data"]["content"])}
+            {MakeSplitStringComponent(itemDetailsData.data?.content || "")}
           </main>
         </>
       )}

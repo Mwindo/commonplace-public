@@ -12,6 +12,7 @@ import NoResults from "../components/layout/NoResults";
 import { ADD_ITEM_ID } from "../components/utilities/itemCardUtilities";
 import classes from "./ItemSearch.module.css";
 import { GQLQueryContext } from "../components/requests/GQLQueryProvider";
+import { ItemData } from "./ItemDetails";
 
 const itemsQuery = gql`
   query items($tag: String, $search: String) {
@@ -19,7 +20,6 @@ const itemsQuery = gql`
       items {
         id
         title
-        author
         description
         image_url
         thumbnail_url
@@ -184,24 +184,13 @@ function ItemSearchPage() {
         <LoadingIcon />
       ) : itemsData["data"].length > 0 ? (
         <ItemCardList
+          items={itemsData["data"]}
+          onDelete={(id: number) => removeItem.mutate(id)}
+          reloadItems={reloadItems}
           pageDecrementText={searchBarText ? "More relevant" : "Newer"}
           pageIncrementText={searchBarText ? "Less relevant" : "Older"}
           showCount={searchBarText + selectedTag ? true : false}
-        >
-          {itemsData["data"].map((item: any) => (
-            <ItemCard
-              key={item["id"]}
-              itemId={item["id"]}
-              itemImage={item["thumbnail_url"] || item["image_url"]}
-              itemTitle={item["title"]}
-              itemDescription={item["description"]}
-              reloadItems={reloadItems}
-              onDelete={() => {
-                removeItem.mutate(parseInt(item["id"]));
-              }}
-            />
-          ))}
-        </ItemCardList>
+        />
       ) : (
         <NoResults />
       )}

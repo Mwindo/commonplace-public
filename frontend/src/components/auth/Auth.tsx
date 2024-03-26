@@ -15,8 +15,8 @@ interface LoginContextProps {
   }: {
     username: string;
     password: string;
-  }) => any;
-  logout: () => any;
+  }) => Promise<LoginResponse>;
+  logout: () => Promise<LogoutResponse | undefined>;
   showSessionExpired: () => void;
 }
 

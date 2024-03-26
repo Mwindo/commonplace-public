@@ -3,7 +3,7 @@ import classes from "./ModalWrapper.module.css";
 import { ModalContext } from "./ModalProvider";
 
 interface ModalWrapperProps {
-  onCancel?: () => any;
+  onCancel?: () => void;
   children?: ReactNode;
   showCloseButton: boolean;
 }

@@ -27,13 +27,13 @@ const testItemCard = ({
 };
 
 it("check no edit buttons appear if not isAuth", () => {
-  const { asFragment, queryByRole } = render(testItemCard({isAuth: false}));
+  const { asFragment, queryByRole } = render(testItemCard({ isAuth: false }));
   expect(asFragment()).toMatchSnapshot();
   expect(queryByRole("menubar")).toBeFalsy();
 });
 
 it("check edit buttons appear if isAuth", () => {
-  const { asFragment, queryByRole } = render(testItemCard({isAuth: true}));
+  const { asFragment, queryByRole } = render(testItemCard({ isAuth: true }));
   expect(asFragment()).toMatchSnapshot();
   expect(queryByRole("menubar")).toBeTruthy();
 });
@@ -43,7 +43,7 @@ it("check edit modal appears when edit clicked", async () => {
   const showModal = () => {
     modalShown = true;
   };
-  const { getByText } = render(testItemCard({isAuth: true, showModal}));
+  const { getByText } = render(testItemCard({ isAuth: true, showModal }));
   await userEvent.click(getByText("Edit"));
   expect(modalShown).toBeTruthy();
 });
@@ -53,7 +53,7 @@ it("check delete modal appears when delete clicked", async () => {
   const showModal = () => {
     modalShown = true;
   };
-  const { getByText } = render(testItemCard({isAuth: true, showModal}));
+  const { getByText } = render(testItemCard({ isAuth: true, showModal }));
   await userEvent.click(getByText("Delete"));
   expect(modalShown).toBeTruthy();
 });

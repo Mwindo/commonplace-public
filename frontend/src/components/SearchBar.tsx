@@ -2,10 +2,11 @@ import classes from "./SearchBar.module.css";
 import Select from "react-select";
 import diceIcon from "../images/dice-icon.svg";
 import { useNavigate } from "react-router-dom";
-import { itemCardIsAddItem } from "./utilities/itemCardUtilities";
+import { itemIsAddItem } from "./utilities/itemCardUtilities";
+import { ItemData } from "../pages/ItemDetails";
 
-const canRandomize = (items: any) => {
-  return items.filter((item: any) => !itemCardIsAddItem(item)).length > 1;
+const canRandomize = (items: ItemData[]) => {
+  return items.filter((item: ItemData) => !itemIsAddItem(item)).length > 1;
 };
 
 interface TagOption {
@@ -14,7 +15,7 @@ interface TagOption {
 }
 
 interface SearchBarProps {
-  currentItems: any[]; // TODO: Fix
+  currentItems: ItemData[];
   onSearch: (searchTerm: string) => void;
   searchTerm: string;
   selectedTag: string;
@@ -29,7 +30,7 @@ function SearchBar({
   selectedTag,
   tagOptions,
   onSelectTag,
-} : SearchBarProps) {
+}: SearchBarProps) {
   const navigate = useNavigate();
 
   // This would be a good place for useCallback if performance issues arise.
@@ -51,7 +52,8 @@ function SearchBar({
           id="search"
           name="search"
           onKeyUp={(e) => {
-            if (e.key === "Enter") onSearch((e.target as HTMLInputElement).value);
+            if (e.key === "Enter")
+              onSearch((e.target as HTMLInputElement).value);
           }}
           onBlur={(e) => onSearch(e.target.value)}
           defaultValue={searchTerm}
@@ -82,7 +84,7 @@ function SearchBar({
             }),
           }}
           onChange={(e) => {
-            if (typeof e === 'object' && e !== null && 'value' in e) {
+            if (typeof e === "object" && e !== null && "value" in e) {
               onSelectTag(e.value);
             } else {
               onSelectTag("");

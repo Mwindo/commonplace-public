@@ -1,7 +1,7 @@
 import Tagg from "./Tag";
 import classes from "./TagBox.module.css";
 
-function TagBox( {tags} : {tags: [string]}) {
+function TagBox({ tags }: { tags: string[] }) {
   return (
     <div role="list" className={classes.tag_box_container}>
       {tags &&

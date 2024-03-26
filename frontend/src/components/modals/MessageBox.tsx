@@ -2,8 +2,8 @@ import classes from "./MessageBox.module.css";
 
 interface MessageBoxProps {
   message: string;
-  onConfirm?: (() => any) | null;
-  onCancel?: (() => any) | null;
+  onConfirm?: (() => void) | null;
+  onCancel?: (() => void) | null;
   onConfirmText?: string;
   onCancelText?: string;
 }
