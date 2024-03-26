@@ -37,7 +37,7 @@ This is a personal project, so deployment details are intentionally left vague. 
 ### Code Improvements:
 
 - Refactor backend get_items.
-- ~~Convert JS to TypeScript~~ First pass is done. I need to go back and remove the use of `any` in some places.
+- ~~Convert JS to TypeScript~~ ~~First pass is done. I need to go back and remove the use of `any` in some places.~~ Second pass is done. What is left is typing for gql responses.
 - Add pytest API tests, ~~which will require adding a db service to the dev docker-compose. Since I'm not using an ORM, I'll also need to make a simple way to map models to tables. (E.g., spinning up the db service should create the relevant tables based on backend models.)~~ this is done but needs improvement
 - Add Selenium (or Puppeteer, or whatever) tests, which will require adding a new service to the dev docker-compose.
 - Better test coverage in general.
