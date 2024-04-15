@@ -16,6 +16,7 @@ jobs:
     - name: Build
       run: |
         pwd
+        ls
         docker-compose -f ./.github/docker-compose-dev-ga.yaml up --build -d
       env:
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
