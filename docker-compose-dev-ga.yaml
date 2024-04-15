@@ -23,18 +23,6 @@ services:
     ports:
       - 5000:5000
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - "./frontend:/src"
-      - "/frontend/node_modules"
-    ports:
-      - 3000:3000
-    depends_on:
-      - backend
-
   nginx:
     image: nginx:1.25
     container_name: nginx
@@ -45,7 +33,6 @@ services:
       - 80:80
     depends_on:
       - backend
-      - frontend
 
   db:
     image: mysql:8.3
