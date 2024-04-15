@@ -13,14 +13,6 @@ jobs:
       with:
         python-version: "3.12"
 
-    - name: cd into backend directory
-      run: |
-        cd backend/src
-    - name: Install dependencies
-      run: |
-        cd backend/src
-        if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
-
     - name: Build
       run: |
         docker-compose -f .github/docker-compose-dev-ga.yml up --build -d
