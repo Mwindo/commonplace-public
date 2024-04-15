@@ -16,7 +16,7 @@ jobs:
 
     - name: Build
       run: |
-        docker-compose -f .github/docker-compose-dev-ga.yaml up --build -d
+        docker-compose -f docker-compose-dev-ga.yaml up --build -d
       env:
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
@@ -29,10 +29,10 @@ jobs:
   
     - name: Run Tests
       run: |
-        docker-compose -f .github/docker-compose-dev-ga.yaml exec backend pytest 
+        docker-compose -f docker-compose-dev-ga.yaml exec backend pytest 
         docker-compose exec -T commonplace_backend_1 pip3 install pytest
         docker-compose exec -T commonplace_backend_1 pytest
 
     - name: Cleanup
       if: always()
-      run: docker-compose -f .github/docker-compose-dev-ga.yaml down
+      run: docker-compose -f docker-compose-dev-ga.yaml down
