@@ -1,0 +1,44 @@
+name: CI with Docker Compose
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/setup-python@v3
+      with:
+        python-version: "3.12"
+
+    - name: cd into backend directory
+      run: |
+        cd backend/src
+    - name: Install dependencies
+      run: |
+        cd backend/src
+        if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+
+    - name: Build
+        run: |
+          docker-compose -f .github/docker-compose-dev-ga.yml up --build -d
+        env:
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_DB: ${{ secrets.DATABASE_DB }}
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          TEST_DATABASE_DB: ${{ secrets.TEST_DATABASE_DB }}
+          ENVIRONMENT: ${{ ENVIRONMENT }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+  
+    - name: Run Tests
+      run: |
+        docker-compose -f .github/docker-compose-dev-ga.yml exec backend pytest 
+        docker-compose exec -T commonplace_backend_1 pip3 install pytest
+        docker-compose exec -T commonplace_backend_1 pytest
+
+    - name: Cleanup
+      if: always()
+      run: docker-compose -f .github/docker-compose-dev-ga.yml down
