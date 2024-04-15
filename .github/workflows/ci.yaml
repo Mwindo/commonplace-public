@@ -5,6 +5,8 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: Dev
 
     steps:
     - uses: actions/setup-python@v3
@@ -30,7 +32,7 @@ jobs:
         DATABASE_DB: ${{ secrets.DATABASE_DB }}
         DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
         TEST_DATABASE_DB: ${{ secrets.TEST_DATABASE_DB }}
-        ENVIRONMENT: ${{ ENVIRONMENT }}
+        ENVIRONMENT: ${{ env.ENVIRONMENT }}
         DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
   
     - name: Run Tests
