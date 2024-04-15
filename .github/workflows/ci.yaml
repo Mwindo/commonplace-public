@@ -33,7 +33,6 @@ jobs:
         DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
         TEST_DATABASE_DB: ${{ secrets.TEST_DATABASE_DB }}
         ENVIRONMENT: ${{ env.ENVIRONMENT }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
   
     - name: Run Tests
       run: |
