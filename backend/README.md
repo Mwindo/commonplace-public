@@ -4,4 +4,4 @@ The backend is written in Python/Flask and uses a MySQL database (simply because
 
 # Unit Tests
 
-In the application directory (your_local_path/commonplace), run docker exec commonplace-backend-1 python3 -m pytest.
+In the application directory (your_local_path/commonplace), run `docker exec commonplace-backend-1 python3 -m pytest` or `docker-compose -f docker-compose-dev.yaml exec backend python3 -m pytest`.
