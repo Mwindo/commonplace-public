@@ -1,12 +1,15 @@
 name: Backend Checks
 
-on: [push, pull_request]
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
-      name: Dev
 
     steps:
     - uses: actions/checkout@v3
