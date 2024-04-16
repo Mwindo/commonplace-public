@@ -45,8 +45,7 @@ jobs:
       run: |
         docker ps
         docker image ls
-        docker-compose logs
-        docker logs commonplace-backend-1
+        df -h
 
     - name: Cleanup
       if: always()
