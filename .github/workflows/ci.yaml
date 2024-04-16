@@ -49,6 +49,7 @@ jobs:
         docker ps -a
         docker image ls
         df -h
+        docker logs commonplace-public_db_1
 
     - name: Cleanup
       if: always()
