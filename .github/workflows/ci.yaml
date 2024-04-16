@@ -22,18 +22,8 @@ jobs:
     - name: Build
       run: |
         docker image prune -a -f
-        echo "Length of secret: ${#DATABASE_DB}"
         docker-compose -f docker-compose-dev-ga.yaml down
         docker-compose -f docker-compose-dev-ga.yaml up --build -d
-      env:
-        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-        FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
-        DATABASE_USER: ${{ secrets.DATABASE_USER }}
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_DB: ${{ secrets.DATABASE_DB }}
-        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-        TEST_DATABASE_DB: ${{ secrets.TEST_DATABASE_DB }}
-        ENVIRONMENT: ${{ env.ENVIRONMENT }}
   
     - name: Run Tests
       run: |

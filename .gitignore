@@ -6,7 +6,7 @@
 /frontend/.pnp.js
 **/__pycache__/
 /backend/venv
-/*.env
+/production.env
 /data
 
 # testing
