@@ -43,7 +43,8 @@ jobs:
     - name: Fetch container logs
       if: always()
       run: |
-        docker ps
+        docker ps -a
+        docker-compose ps
         docker image ls
         df -h
 
