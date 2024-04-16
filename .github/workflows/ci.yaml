@@ -1,4 +1,4 @@
-name: CI with Docker Compose
+name: Backend Checks
 
 on: [push, pull_request]
 
@@ -14,15 +14,8 @@ jobs:
       with:
         python-version: "3.12"
 
-    - name: Install Docker Compose
-      run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-
     - name: Build
       run: |
-        docker image prune -a -f
-        docker-compose -f docker-compose-dev-ga.yaml down
         docker-compose -f docker-compose-dev-ga.yaml up --build -d
   
     - name: Run Tests
@@ -30,11 +23,10 @@ jobs:
         docker-compose -f docker-compose-dev-ga.yaml exec -T backend pip3 install pytest
         docker-compose -f docker-compose-dev.yaml exec -T backend python3 -m pytest
 
-    - name: Fetch container logs
+    - name: Print logs
       if: always()
       run: |
         docker ps -a
-        docker image ls
         df -h
         docker logs commonplace-public_db_1
         docker logs commonplace-public_backend_1
