@@ -26,11 +26,11 @@ docker-compose -f docker-compose-dev.yaml up
 
 and navigate to [dev.commonplace.com](http://dev.commonplace.com).
 
-To log in locally for development, navigate to [dev.commonplace.com/admin](http://dev.commonplace.com/admin) and enter username Admin and password TestPassword.
+To log in locally for development, navigate to [dev.commonplace.com/admin](http://dev.commonplace.com/admin) and enter username `Admin` and password `TestPassword`.
 
 ## CI
 
-This project using GitHub Actions. The "merge checks" workflow must pass before a PR can be merged into main. Rather than running the workflow on, e.g., every push, however, which would be wasteful, you should specify when you are ready to run the workflow by adding the label "run-tests." As soon as this label is added, and on pushes to the PR while the label is active, the "merge checks" workflow will run.
+This project uses GitHub Actions. The "merge checks" workflow must pass before a PR can be merged into main. Rather than running the workflow on, e.g., every push, however, which would be wasteful, you should specify when you are ready to run the workflow by adding the label "run-tests." As soon as this label is added, and on pushes to the PR while the label is active, the "merge checks" workflow will run.
 
 ## Tests
 
