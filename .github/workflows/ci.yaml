@@ -2,12 +2,12 @@ name: Backend Checks
 
 on:
   pull_request:
-    types: [opened, synchronize, labeled]
+    types: [opened, synchronize, labeled, unlabeled]
 
 jobs:
   build:
-    name: merge checks
     if: contains(github.event.pull_request.labels.*.name, 'run-tests')
+    name: merge checks 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
