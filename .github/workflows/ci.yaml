@@ -27,8 +27,8 @@ jobs:
   
     - name: Run Tests
       run: |
-        docker-compose -f docker-compose-dev-ga.yaml exec -T commonplace-public_backend_1 pip3 install pytest
-        docker-compose -f docker-compose-dev-ga.yaml exec -T commonplace-public_backend_1 pytest
+        docker-compose -f docker-compose-dev-ga.yaml exec -T backend pip3 install pytest
+        docker-compose -f docker-compose-dev.yaml exec -T backend python3 -m pytest
 
     - name: Fetch container logs
       if: always()
