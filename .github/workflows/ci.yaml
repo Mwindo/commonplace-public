@@ -2,7 +2,7 @@ name: Backend Checks
 
 on:
   label:
-    types: [created]
+    types: [push]
 
 jobs:
   build:
