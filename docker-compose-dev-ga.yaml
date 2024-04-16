@@ -9,15 +9,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      FLASK_SECRET_KEY: ${FLASK_SECRET_KEY}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_DB: ${DATABASE_DB}
-      DATABASE_HOST: ${DATABASE_HOST}
-      TEST_DATABASE_DB: ${TEST_DATABASE_DB}
-      ENVIRONMENT: ${ENVIRONMENT}
     volumes:
       - "./backend/src:/app"
     ports:
