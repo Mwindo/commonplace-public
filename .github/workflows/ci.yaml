@@ -2,10 +2,11 @@ name: Backend Checks
 
 on:
   pull_request:
-    types: [opened, synchronize, labeled]
+    types: [opened, synchronize, labeled, unlabeled]
 
 jobs:
   build:
+    if: contains(github.event.pull_request.labels.*.name, 'run-tests')
     name: merge checks 
     runs-on: ubuntu-latest
     steps:
@@ -13,12 +14,6 @@ jobs:
     - uses: actions/setup-python@v3
       with:
         python-version: "3.12"
-
-    - name: Fail workflow until run
-      if: ${{ !contains(github.event.pull_request.labels.*.name, 'run-tests') }}
-      run: |
-        echo "Cannot merge until tests run"
-        exit 1
 
     - name: Build
       run: |
