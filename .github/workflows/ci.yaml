@@ -35,7 +35,9 @@ jobs:
 
     - name: Fetch container logs
       if: always()
-      run: docker logs commonplace-backend-1
+      run: |
+        docker ps
+        docker logs commonplace-backend-1
 
     - name: Cleanup
       if: always()
