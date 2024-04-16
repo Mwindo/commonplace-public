@@ -21,6 +21,8 @@ jobs:
 
     - name: Build
       run: |
+        sudo docker image prune
+        docker-compose -f docker-compose-dev-ga.yaml down
         docker-compose -f docker-compose-dev-ga.yaml up --build -d
       env:
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
