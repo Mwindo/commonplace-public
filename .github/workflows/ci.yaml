@@ -1,12 +1,12 @@
 name: Backend Checks
 
-on:
+on: 
   pull_request:
-    types: [opened, synchronize, labeled, unlabeled]
+    types: [opened, edited, reopened, synchronize, ready_for_review]
 
 jobs:
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'run-tests')
+    if: '! github.event.pull_request.draft'
     name: merge checks 
     runs-on: ubuntu-latest
     steps:

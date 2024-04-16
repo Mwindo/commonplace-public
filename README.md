@@ -30,7 +30,7 @@ To log in locally for development, navigate to [dev.commonplace.com/admin](http:
 
 ## CI
 
-This project uses GitHub Actions. The "merge checks" workflow must pass before a PR can be merged into main. Rather than running the workflow on, e.g., every push, however, which would be wasteful, you should specify when you are ready to run the workflow by adding the label "run-tests." As soon as this label is added, and on pushes to the PR while the label is active, the "merge checks" workflow will run.
+This project uses GitHub Actions. The "merge checks" workflow must pass before a PR can be merged into main. These checks will not run while the PR is a draft but will run automatically on updates to the PR otherwise.
 
 ## Tests
 
