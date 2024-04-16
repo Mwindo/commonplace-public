@@ -10,7 +10,7 @@ https://github.com/Mwindo/commonplace-public/assets/47676832/3a1b44e7-f2c6-47ef-
 
 ## Development
 
-Make a copy of .env_template, fill in the fields, and save as dev.env.
+Local environment variables are stored in dev.env.
 
 Modify your [hosts file](https://en.wikipedia.org/wiki/Hosts_(file)) so that dev.commonplace.com routes to 127.0.0.1:
 
@@ -27,6 +27,10 @@ docker-compose -f docker-compose-dev.yaml up
 and navigate to [dev.commonplace.com](http://dev.commonplace.com).
 
 To log in locally for development, navigate to [dev.commonplace.com/admin](http://dev.commonplace.com/admin) and enter username Admin and password TestPassword. 
+
+## Tests
+
+See the ./backend and ./frontend READMEs.
 
 ## Deployment
 
