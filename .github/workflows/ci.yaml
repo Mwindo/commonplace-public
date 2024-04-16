@@ -1,7 +1,8 @@
 name: Backend Checks
 
-on: pull-request
-  types: [opened, edited, reopened, synchronize, ready_for_review]
+on: 
+  pull-request:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
 
 jobs:
   build:
