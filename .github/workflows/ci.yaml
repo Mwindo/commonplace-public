@@ -34,6 +34,7 @@ jobs:
         docker-compose exec -T commonplace-backend-1 pytest
 
     - name: Fetch container logs
+      if: always()
       run: docker logs commonplace-backend-1
 
     - name: Cleanup
