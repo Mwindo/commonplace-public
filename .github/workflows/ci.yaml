@@ -21,7 +21,7 @@ jobs:
 
     - name: Build
       run: |
-        sudo docker image prune
+        docker image prune -a -f
         docker-compose -f docker-compose-dev-ga.yaml down
         docker-compose -f docker-compose-dev-ga.yaml up --build -d
       env:
