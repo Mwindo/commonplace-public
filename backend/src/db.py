@@ -7,10 +7,6 @@ class database_connection:
     connection: pymysql.Connection
 
     def __init__(self, app):
-        print('\nVars')
-        print(app.config["MYSQL_DATABASE_HOST"])
-        print(app.config["MYSQL_DATABASE_DB"])
-        print('\n')
         self.connection = pymysql.connect(
             host=app.config["MYSQL_DATABASE_HOST"],
             user=app.config["MYSQL_DATABASE_USER"],
