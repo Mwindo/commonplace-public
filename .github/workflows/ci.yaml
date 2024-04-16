@@ -29,9 +29,12 @@ jobs:
   
     - name: Run Tests
       run: |
-        docker-compose -f docker-compose-dev-ga.yaml exec backend pytest 
-        docker-compose exec -T commonplace_backend_1 pip3 install pytest
-        docker-compose exec -T commonplace_backend_1 pytest
+        docker-compose -f docker-compose-dev-ga.yaml exec commonplace-backend-1 pytest 
+        docker-compose exec -T commonplace-backend-1 pip3 install pytest
+        docker-compose exec -T commonplace-backend-1 pytest
+
+    - name: Fetch container logs
+      run: docker logs commonplace-backend-1
 
     - name: Cleanup
       if: always()
